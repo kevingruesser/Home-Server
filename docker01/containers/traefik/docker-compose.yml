@@ -24,7 +24,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICENAME}.entrypoints=http"
       - "traefik.http.routers.${SERVICENAME}.rule=Host(`${SERVICENAME}.local.asuras.network`)"
-      - "traefik.http.middlewares.${SERVICENAME}-auth.basicauth.users=${DASHBOARDUSER}:${DASHBOARPASS}"
+      - "traefik.http.middlewares.${SERVICENAME}-auth.basicauth.users=${DASHBOARDUSER}:${DASHBOARDPASS}"
       - "traefik.http.middlewares.${SERVICENAME}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.${SERVICENAME}.middlewares=traefik-https-redirect"
