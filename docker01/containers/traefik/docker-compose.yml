@@ -12,8 +12,8 @@ services:
       - 80:80
       - 443:443
     environment:
-      - CF_API_EMAIL=info@kevin-gruesser.de
-      - CF_DNS_API_TOKEN=7a7ac6403571590e5ab6ff3b9b8b6a1d58336
+      - CF_API_EMAIL=${CLOUDFLAREMAIL}
+      - CF_DNS_API_TOKEN=${CLOUDFLARETOKEN}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -22,20 +22,20 @@ services:
       - /opt/containers/traefik/data/config.yml:/config.yml:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.entrypoints=http"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.local.asuras.network`)"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=${DASHBOARDUSER}:$$apr1$$0Fh9g2EV$$Dfst/YIHjAoJUjK1YD7JR/"
-      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICENAME}.entrypoints=http"
+      - "traefik.http.routers.${SERVICENAME}.rule=Host(`${SERVICENAME}.local.asuras.network`)"
+      - "traefik.http.middlewares.${SERVICENAME}-auth.basicauth.users=${DASHBOARDUSER}:${DASHBOARPASS}"
+      - "traefik.http.middlewares.${SERVICENAME}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
-      - "traefik.http.routers.traefik-secure.entrypoints=https"
-      - "traefik.http.routers.traefik-secure.rule=Host(`traefik.local.asuras.network`)"
-      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
-      - "traefik.http.routers.traefik-secure.tls=true"
-      - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].main=local.asuras.network"
-      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.local.asuras.network"
-      - "traefik.http.routers.traefik-secure.service=api@internal"
+      - "traefik.http.routers.${SERVICENAME}.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.${SERVICENAME}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICENAME}-secure.rule=Host(`${SERVICENAME}.local.asuras.network`)"
+      - "traefik.http.routers.${SERVICENAME}-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.${SERVICENAME}-secure.tls=true"
+      - "traefik.http.routers.${SERVICENAME}-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.${SERVICENAME}-secure.tls.domains[0].main=local.asuras.network"
+      - "traefik.http.routers.${SERVICENAME}-secure.tls.domains[0].sans=*.local.asuras.network"
+      - "traefik.http.routers.${SERVICENAME}-secure.service=api@internal"
 
 networks:
   traefik:
