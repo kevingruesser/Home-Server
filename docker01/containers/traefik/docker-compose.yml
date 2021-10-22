@@ -1,3 +1,8 @@
+#Lege eine .env mit folgenden Tags an:
+#SERVICENAME=
+#TRAEFIK_TAG=
+#CLOUDFLAREMAIL=
+#CLOUDFLARETOKEN=
 version: "3"
 services:
   traefik:
@@ -17,9 +22,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./data/traefik.yml:/traefik.yml:ro
-      - ./data/acme.json:/acme.json
-      - ./data/config.yml:/config.yml:ro
+      - /opt/containers/traefik/data/traefik.yml:/traefik.yml:ro
+      - /opt/containers/traefik/data/acme.json:/acme.json
+      - /opt/containers/traefik/data/config.yml:/config.yml:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICENAME}.entrypoints=http"
