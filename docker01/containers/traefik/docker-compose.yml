@@ -1,8 +1,3 @@
-#Lege eine .env mit folgenden Tags an:
-#SERVICENAME=
-#TRAEFIK_TAG=
-#CLOUDFLAREMAIL=
-#CLOUDFLARETOKEN=
 version: "3"
 services:
   traefik:
