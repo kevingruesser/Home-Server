@@ -7,7 +7,7 @@ services:
   guacamole:
     container_name: "System-Guacamole"
     restart: always
-    image: onzu/guacamole:${GUACAMOLE_TAG}
+    image: oznu/guacamole:${GUACAMOLE_TAG}
     networks:
       - traefik
     ports:
