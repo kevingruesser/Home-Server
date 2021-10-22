@@ -1,0 +1,23 @@
+version: "3"
+services:
+    vaultwarden:
+        image: vaultwarden/server:${VAULTWARDEN_TAG}
+        container_name: Vaultwarden
+        ports:
+         - 81:80
+        networks:
+         - traefik
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.${SERVICE}.entrypoints=http"
+          - "traefik.http.routers.${SERVICE}.rule=Host(`passwort.local.asuras.network`)"
+          - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+          - "traefik.http.routers.${SERVICE}.middlewares=vaultwarden-https-redirect"
+          - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+          - "traefik.http.routers.${SERVICE}-secure.rule=Host(`passwort.local.asuras.network`)"
+          - "traefik.http.routers.${SERVICE}-secure.tls=true"
+        volumes:
+          - ./data/:/data/
+networks:
+    traefik:
+        external: true
