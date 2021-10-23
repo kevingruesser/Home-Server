@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.${SERVICE}.entrypoints=http"
       - "traefik.http.routers.${SERVICE}.rule=Host(`${SERVICE}.local.asuras.network`)"
       - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE}.middlewares=portainer-https-redirect"
+      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
       - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
       - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${SERVICE}.local.asuras.network`)"
       - "traefik.http.routers.${SERVICE}-secure.tls=true"
