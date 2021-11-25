@@ -1,5 +1,6 @@
-apt update && apt upgrade
+apt update && apt upgrade && apt install gnupg2
 useradd -m -u 1500 -g users,sudo -s /bin/bash kevingruesser
 mkdir /opt/code
-cd /root/ && wget http://www.webmin.com/download/deb/webmin-current.deb
-dpkg -i webmin-current.deb
+echo "deb https://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+cd /root/ && wget https://download.webmin.com/jcameron-key.asc && cat jcameron-key.asc | gpg --dearmor >/etc/apt/trusted.gpg.d/jcameron-key.gpg
+apt-get install apt-transport-https && apt-get update
