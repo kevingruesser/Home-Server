@@ -1,1 +1,5 @@
-
+apt update && apt upgrade
+useradd -m -u 1500 -g users,sudo -s /bin/bash kevingruesser
+mkdir /opt/code
+cd /root/ && wget http://www.webmin.com/download/deb/webmin-current.deb
+dpkg -i webmin-current.deb
