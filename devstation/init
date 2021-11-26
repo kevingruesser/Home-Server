@@ -1,4 +1,4 @@
-apt update && apt upgrade && apt install gnupg2 perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python unzip
+apt update && apt upgrade && apt install gnupg2 perl libnet-ssleay-perl openssl libauthen-pam-perl libpam-runtime libio-pty-perl apt-show-versions python unzip joe
 useradd -m -u 1500 -g users,sudo -s /bin/bash kevingruesser
 mkdir /opt/code
 echo "deb https://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
