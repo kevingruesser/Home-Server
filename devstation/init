@@ -5,3 +5,6 @@ echo "deb https://download.webmin.com/download/repository sarge contrib" >> /etc
 cd /root/ && wget https://download.webmin.com/jcameron-key.asc && cat jcameron-key.asc | gpg --dearmor >/etc/apt/trusted.gpg.d/jcameron-key.gpg
 apt install apt-transport-https && apt update
 apt install webmin
+
+# Copy sshd_config to /etc/ssh/sshd_config
+systemctl restart ssh
