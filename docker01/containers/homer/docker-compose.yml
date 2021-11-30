@@ -1,0 +1,29 @@
+version: "3"
+services:
+  homer:
+    image: b4bz/homer
+    container_name: homer
+    volumes:
+      - ./data/homer/:/www/assets
+    ports:
+      - 8084:8080
+    environment:
+      - UID=1000
+      - GID=1000
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
+      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.docker.network=traefik"
+    restart: unless-stopped
+
+networks:
+    traefik:
+        external: true
