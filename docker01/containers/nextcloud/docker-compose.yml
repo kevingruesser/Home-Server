@@ -1,49 +1,32 @@
-version: '2'
+version: '2.1'
 
 services:
-  db:
-    image: mariadb
-    restart: always
-    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
-    volumes:
-      - ./data/db/:/var/lib/mysql
-    networks:
-      - cloud_bridge
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud
+    container_name: nextcloud
     environment:
-      - MYSQL_ROOT_PASSWORD=${SQLROOTPASS}
-      - MYSQL_PASSWORD=${SQLPASS}
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-
-  app:
-    image: nextcloud:${NEXTCLOUD_TAG}
-    restart: always
-    links:
-      - db
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
     volumes:
-      - ./data/nextcloud/:/var/www/html
-    environment:
-      - MYSQL_PASSWORD=${SQLPASS}
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-      - MYSQL_HOST=db
-    ports:
-      - 8080:80
+      - ./data/config/:/config
+      - ./data/files/:/data
     networks:
       - traefik
-      - cloud_bridge
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
       - "traefik.http.routers.${SERVICE}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE}.rule=Host(`cloud.local.asuras.network`)"
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
       - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
       - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`cloud.local.asuras.network`)"
+      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
       - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.http.services.nextcloud.loadBalancer.server.port=443"
+      - "traefik.http.services.nextcloud.loadBalancer.server.scheme=https"
+    restart: unless-stopped
 
 networks:
   traefik:
     external: true
-  cloud_bridge:
-    driver: bridge
