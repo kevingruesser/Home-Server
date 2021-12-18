@@ -1,0 +1,59 @@
+version: '3.1'
+
+services:
+
+  postgres:
+    image: postgres:11
+    restart: always
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_NON_ROOT_USER
+      - POSTGRES_NON_ROOT_PASSWORD
+    volumes:
+      - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+    networks:
+      - n8n_bridge
+
+  n8n:
+    image: n8nio/n8n
+    restart: always
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
+      - DB_POSTGRESDB_USER=${POSTGRES_NON_ROOT_USER}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_NON_ROOT_PASSWORD}
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER
+      - N8N_BASIC_AUTH_PASSWORD
+    ports:
+      - 5678:5678
+    links:
+      - postgres
+    volumes:
+      - ./data/n8n/:/home/node/.n8n
+    networks:
+      - traefik
+      - n8n_bridge
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
+      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.docker.network=traefik"
+    # Wait 5 seconds to start n8n to make sure that PostgreSQL is ready
+    # when n8n tries to connect to it
+    command: /bin/sh -c "sleep 5; n8n start"
+
+networks:
+  traefik:
+    external: true
+  n8n_bridge:
+    driver: bridge
