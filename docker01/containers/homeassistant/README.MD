@@ -2,7 +2,7 @@ Im Container die configuration.yaml ändern und die IPs entsprechend abändern.
 Wenn nicht sicher ist welche IP freigegeben werden muss einfach einmal den Container starten und die URL aufrufen.
 Im Log wird dann die IP angezeigt die freigegeben werden muss.
 
-```
+```yaml
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
