@@ -1,8 +1,0 @@
-Eine .env mit folgenden TAGs:
-
-```
-SERVICE=
-NEXTCLOUD_TAG=
-SQLROOTPASS=
-SQLPASS=
-```
