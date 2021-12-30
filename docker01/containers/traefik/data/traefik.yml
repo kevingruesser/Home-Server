@@ -17,7 +17,7 @@ providers:
 certificatesResolvers:
   cloudflare:
     acme:
-      email: info@kevin-gruesser.de
+      email: <YOUR_MAIL_ADDRESS>
       storage: acme.json
       dnsChallenge:
         provider: cloudflare
