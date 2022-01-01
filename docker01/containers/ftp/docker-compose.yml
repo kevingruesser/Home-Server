@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  ftpd_server:
+    image: stilliard/pure-ftpd
+    container_name: pure-ftpd
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    volumes:
+      - "./data/upload:/home/kevingruesser/upload"
+      - "./data/debian:/home/kevingruesser/debian"
+    environment:
+      PUBLICHOST: "${FTP_HOST}"
+      FTP_USER_NAME: ${FTP_USER}
+      FTP_USER_PASS: ${FTP_PASS}
+      FTP_USER_HOME: ${FTP_HOME}
+      FTP_USER_UID: ${FTP_UID}
+      FTP_USER_GID: ${FTP_GID}
+    restart: always
