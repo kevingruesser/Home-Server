@@ -1,0 +1,68 @@
+version: "2.1"
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+      - USER=${USERNAME} #optional
+      - PASS=${PASSWORD} #optional
+      #- WHITELIST=iplist #optional
+      #- HOST_WHITELIST=dnsnane list #optional
+    volumes:
+      - ./data/config:/config
+      - ./data/downloads:/downloads
+      - ./data/watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
+      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.docker.network=traefik"
+
+  syncthing:
+    image: lscr.io/linuxserver/syncthing
+    container_name: syncthing_${SERVICE}
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    volumes:
+      - ./data/syncthin/config:/config
+      - ./data/downloads:/data1
+    ports:
+      - 8385:8384
+      - 22001:22000/tcp
+      - 22001:22000/udp
+      - 21028:21027/udp
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.${SYNCSERVICE}.entrypoints=http"
+          - "traefik.http.routers.${SYNCSERVICE}.rule=Host(`${CONTAINERSYNCURL}`)"
+          - "traefik.http.middlewares.${SYNCSERVICE}-https-redirect.redirectscheme.scheme=https"
+          - "traefik.http.routers.${SYNCSERVICE}.middlewares=${SERVICE}-https-redirect"
+          - "traefik.http.routers.${SYNCSERVICE}-secure.entrypoints=https"
+          - "traefik.http.routers.${SYNCSERVICE}-secure.rule=Host(`${CONTAINERSYNCURL}`)"
+          - "traefik.http.routers.${SYNCSERVICE}-secure.tls=true"
+          - "traefik.http.services.${SYNCSERVICE}.loadbalancer.server.port=8384"
+
+networks:
+    traefik:
+        external: true
