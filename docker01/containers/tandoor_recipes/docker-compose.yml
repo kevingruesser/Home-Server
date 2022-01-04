@@ -1,0 +1,55 @@
+version: "3"
+services:
+  db_recipes:
+    image: postgres:11-alpine
+    restart: always
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - recipes
+
+  web_recipes:
+    image: vabene1111/recipes
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - ./data/staticfiles:/opt/recipes/staticfiles
+      - ./data/nginx_config:/opt/recipes/nginx/conf.d
+      - ./data/mediafiles:/opt/recipes/mediafiles
+    depends_on:
+      - db_recipes
+    networks:
+      - recipes
+
+  nginx_recipes:
+    image: nginx:mainline-alpine
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - ./data/nginx_config:/etc/nginx/conf.d:ro
+      - ./data/staticfiles:/static
+      - ./data/mediafiles:/media
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
+      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.docker.network=traefik"
+    depends_on:
+      - web_recipes
+    networks:
+      - recipes
+      - traefik
+
+networks:
+  recipes:
+  traefik:
+    external: true
