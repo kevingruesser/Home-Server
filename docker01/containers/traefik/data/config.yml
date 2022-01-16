@@ -1,90 +1,24 @@
 http:
  #region routers
   routers:
-    proxmox:
+    SERVICENAME:
       entryPoints:
         - "https"
-      rule: "Host(`proxmox.local.asuras.network`)"
+      rule: "Host(`URL`)"
       middlewares:
         - default-headers
       tls: {}
-      service: proxmox
-    pve1:
-      entryPoints:
-        - "https"
-      rule: "Host(`pve1.local.asuras.network`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: pve1
-    pve2:
-      entryPoints:
-        - "https"
-      rule: "Host(`pve2.local.asuras.network`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: pve2
-    fritzbox:
-      entryPoints:
-        - "https"
-      rule: "Host(`fritzbox.local.asuras.network`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: fritzbox
-    pihole:
-      entryPoints:
-        - "https"
-      rule: "Host(`pihole.local.asuras.network`)"
-      middlewares:
-        - default-headers
-        - addprefix-pihole
-      tls: {}
-      service: pihole
-    devstation:
-      entryPoints:
-        - "https"
-      rule: "Host(`devstation.local.asuras.network`)"
-      middlewares:
-        - default-headers
-      tls: {}
-      service: devstation
+      service: SERVICENAME
+
 
 #endregion
 #region services
   services:
-    proxmox:
+    SERVICENAME:
       loadBalancer:
         servers:
-          - url: "https://172.30.31.2:8006"
+          - url: "TARGETURL:PORT"
         passHostHeader: true
-    pve1:
-      loadBalancer:
-        servers:
-          - url: "https://172.30.31.2:8006"
-        passHostHeader: true
-    pve2:
-      loadBalancer:
-        servers:
-          - url: "https://172.30.31.3:8006"
-        passHostHeader: true
-    pihole:
-      loadBalancer:
-        servers:
-          - url: "http://172.30.31.254:80"
-        passHostHeader: true
-    fritzbox:
-      loadBalancer:
-        servers:
-          - url: "https://fritz.box"
-        passHostHeader: true
-    devstation:
-      loadBalancer:
-        servers:
-          - url: "https://172.30.30.51:10000"
-        passHostHeader: true
-
 
 #endregion
   middlewares:
