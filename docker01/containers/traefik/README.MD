@@ -6,7 +6,7 @@ data/config.yml und data/traefik.yml noch anpassen.
 Um DASHBOARDUSER & PASS zu generieren folgende Befehle ausführen:
 
 ```
-apt install apache-utils
+apt install apache2-utils
 echo $(htpasswd -nb <BENUTZERNAME> <PASSWORT>)
 ```
 
