@@ -11,6 +11,7 @@ services:
        - "db-data:/var/lib/postgresql/data"
       networks:
        - gogs
+       - database_bridge
     gogs:
       image: gogs/gogs:${VERSION_TAG}
       restart: always
@@ -23,7 +24,7 @@ services:
        - "RUN_CROND=true"
       networks:
        - traefik
-       - database_bridge
+       - gogs
       volumes:
        - "gogs-data:/data"
       labels:
