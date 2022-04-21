@@ -1,0 +1,52 @@
+version: '2'
+services:
+    postgres:
+      image: postgres:9.5
+      restart: always
+      environment:
+       - "POSTGRES_USER=${POSTGRES_USER}"
+       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+       - "POSTGRES_DB=gogs"
+      volumes:
+       - "db-data:/var/lib/postgresql/data"
+      networks:
+       - gogs
+    gogs:
+      image: gogs/gogs:${VERSION_TAG}
+      restart: always
+      ports:
+       - "10022:22"
+       - "3000:3000"
+      links:
+       - postgres
+      environment:
+       - "RUN_CROND=true"
+      networks:
+       - traefik
+       - gogs
+      volumes:
+       - "gogs-data:/data"
+      labels:
+       - "traefik.enable=true"
+       - "traefik.http.routers.${SERVICE}.entrypoints=http"
+       - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
+       - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+       - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
+       - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+       - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
+       - "traefik.http.routers.${SERVICE}-secure.tls=true"
+       - "traefik.docker.network=traefik"
+      depends_on:
+       - postgres
+
+networks:
+    traefik:
+      external: true
+    gogs:
+      driver: bridge
+
+volumes:
+    db-data:
+      driver: local
+    gogs-data:
+      driver: local
