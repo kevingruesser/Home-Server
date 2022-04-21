@@ -1,8 +1,8 @@
 version: '3.6'
 
 services:
-  flame:
-    image: dbeaver/cloudbeaver:${version}
+  dbeaver:
+    image: dbeaver/cloudbeaver:${VERSION}
     container_name: DBEAVER
     volumes:
       - dbeaver:/opt/cloudbeaver/workspace
