@@ -36,6 +36,7 @@ services:
        - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
        - "traefik.http.routers.${SERVICE}-secure.tls=true"
        - "traefik.docker.network=traefik"
+       - "traefik.http.services.${SERVICE}.loadbalancer.server.port=3000"
       depends_on:
        - postgres
 
