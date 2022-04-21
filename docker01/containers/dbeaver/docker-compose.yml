@@ -10,7 +10,7 @@ services:
       - 81:8978
     networks:
       - traefik
-      - gogs
+      - database_bridge
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICE}.entrypoints=http"
@@ -21,8 +21,6 @@ services:
       - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
       - "traefik.http.routers.${SERVICE}-secure.tls=true"
       - "traefik.docker.network=traefik"
-    environment:
-      - PASSWORD_FILE=/run/secrets/password # optional but required for (1)
     restart: unless-stopped
 
 volumes:
@@ -32,4 +30,5 @@ volumes:
 networks:
   traefik:
     external: true
-  gogs:
+  database_bridge:
+    external: true
