@@ -23,7 +23,7 @@ services:
        - "RUN_CROND=true"
       networks:
        - traefik
-       - gogs
+       - database_bridge
       volumes:
        - "gogs-data:/data"
       labels:
@@ -42,6 +42,8 @@ services:
 
 networks:
     traefik:
+      external: true
+    database_bridge:
       external: true
     gogs:
       driver: bridge
