@@ -1,0 +1,35 @@
+version: '3.6'
+
+services:
+  flame:
+    image: dbeaver/cloudbeaver:${version}
+    container_name: DBEAVER
+    volumes:
+      - dbeaver:/opt/cloudbeaver/workspace
+    ports:
+      - 81:8978
+    networks:
+      - traefik
+      - gogs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
+      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
+      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.docker.network=traefik"
+    environment:
+      - PASSWORD_FILE=/run/secrets/password # optional but required for (1)
+    restart: unless-stopped
+
+volumes:
+  dbeaver:
+    driver: local
+    
+networks:
+  traefik:
+    external: true
+  gogs:
