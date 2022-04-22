@@ -1,3 +1,7 @@
+
+Unfinished!!
+
+
 From Dokumentation:
 https://www.openhab.org/docs/installation/docker.html#obtaining-the-official-image-from-dockerhub
 
