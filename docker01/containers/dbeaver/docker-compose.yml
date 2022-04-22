@@ -21,6 +21,10 @@ services:
       - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
       - "traefik.http.routers.${SERVICE}-secure.tls=true"
       - "traefik.docker.network=traefik"
+      - "flame.type=application"
+      - "flame.name=DBeaver"
+      - "flame.url=${CONTAINERURL}"
+      - "flame.icon=database"
     restart: unless-stopped
 
 volumes:
