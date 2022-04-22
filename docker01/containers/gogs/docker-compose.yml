@@ -38,6 +38,10 @@ services:
        - "traefik.http.routers.${SERVICE}-secure.tls=true"
        - "traefik.docker.network=traefik"
        - "traefik.http.services.${SERVICE}.loadbalancer.server.port=3000"
+       - "flame.type=application"
+       - "flame.name=Git"
+       - "flame.url=${CONTAINERURL}"
+       - "flame.icon=git"
       depends_on:
        - postgres
 
