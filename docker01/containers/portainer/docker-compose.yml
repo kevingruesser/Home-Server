@@ -25,6 +25,10 @@ services:
       - "traefik.http.routers.${SERVICE}-secure.service=portainer"
       - "traefik.http.services.${SERVICE}.loadbalancer.server.port=9000"
       - "traefik.docker.network=traefik"
+      - "flame.type=application"
+      - "flame.name=Portainer"
+      - "flame.url=${CONTAINERURL}"
+      - "flame.icon=docker"
 
 networks:
   traefik:
