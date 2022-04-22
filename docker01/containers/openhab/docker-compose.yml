@@ -1,0 +1,39 @@
+version: '2'
+services:
+    openhab:
+      image: openhab/openhab:${VERSION_TAG}
+      restart: always
+      ports:
+       - "10022:22"
+       - "3000:3000"
+      networks:
+       - traefik
+       - host
+      volumes:
+       - "/etc/localtime:/etc/localtime:ro" 
+       - "/etc/timezone:/etc/timezone:ro"
+       - "./data/conf:/openhab/conf"
+       - "./data/userdata:/openhab/userdata"
+       - "./data/addons:/openhab/addons"
+      environment:
+       - CRYPTO_POLICY=unlimited
+       - USER_ID=997
+       - GROUP_ID=997
+      labels:
+       - "traefik.enable=true"
+       - "traefik.http.routers.${SERVICE}.entrypoints=http"
+       - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
+       - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+       - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
+       - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+       - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
+       - "traefik.http.routers.${SERVICE}-secure.tls=true"
+       - "traefik.docker.network=traefik"
+       - "flame.type=application"
+       - "flame.name=OpenHAB"
+       - "flame.url=${CONTAINERURL}"
+       - "flame.icon=home-automation"
+
+networks:
+    traefik:
+      external: true
