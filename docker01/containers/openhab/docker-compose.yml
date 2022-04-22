@@ -3,9 +3,6 @@ services:
     openhab:
       image: openhab/openhab:${VERSION_TAG}
       restart: always
-      ports:
-       - "10022:22"
-       - "3000:3000"
       networks:
        - traefik
        - host
@@ -17,8 +14,8 @@ services:
        - "./data/addons:/openhab/addons"
       environment:
        - CRYPTO_POLICY=unlimited
-       - USER_ID=997
-       - GROUP_ID=997
+       - USER_ID=${UID}
+       - GROUP_ID=${GID}
       labels:
        - "traefik.enable=true"
        - "traefik.http.routers.${SERVICE}.entrypoints=http"
