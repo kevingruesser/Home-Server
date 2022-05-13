@@ -4,6 +4,9 @@ services:
   dbeaver:
     image: dbeaver/cloudbeaver:${VERSION}
     container_name: DBEAVER
+    env_file:
+      - ../.env
+      - .env-overwrite
     volumes:
       - dbeaver:/opt/cloudbeaver/workspace
     ports:
