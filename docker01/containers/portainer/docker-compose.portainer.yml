@@ -4,6 +4,9 @@ services:
   portainer:
     image: portainer/portainer-ce:${PORTAINER_TAG}
     container_name: portainer
+    env_file:
+      - ../.env
+      - .env-overwrite
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
