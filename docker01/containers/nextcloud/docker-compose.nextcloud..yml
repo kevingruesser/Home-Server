@@ -4,6 +4,9 @@ services:
   nextcloud:
     image: lscr.io/linuxserver/nextcloud
     container_name: nextcloud
+    env_file:
+      - ../.env
+      - .env-overwrite
     environment:
       - PUID=1000
       - PGID=1000
