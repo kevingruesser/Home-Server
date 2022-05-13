@@ -2,6 +2,9 @@ version: "3"
 services:
   db_recipes:
     image: postgres:11-alpine
+    env_file:
+      - ../.env
+      - .env-overwrite
     restart: always
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data
@@ -26,6 +29,9 @@ services:
 
   nginx_recipes:
     image: nginx:mainline-alpine
+    env_file:
+      - ../.env
+      - .env-overwrite
     restart: always
     env_file:
       - ./.env
