@@ -1,0 +1,55 @@
+http:
+ #region routers
+  routers:
+    SERVICENAME:
+      entryPoints:
+        - "https"
+      rule: "Host(`URL`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: SERVICENAME
+
+
+#endregion
+#region services
+  services:
+    SERVICENAME:
+      loadBalancer:
+        servers:
+          - url: "TARGETURL:PORT"
+        passHostHeader: true
+
+#endregion
+  middlewares:
+    addprefix-pihole:
+      addPrefix:
+        prefix: "/admin"
+    https-redirect:
+      redirectScheme:
+        scheme: https
+
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipWhiteList:
+        sourceRange:
+        - "172.30.30.0/24"
+        - "172.30.31.0/24"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
