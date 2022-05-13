@@ -3,6 +3,9 @@ services:
   syncthing:
     image: lscr.io/linuxserver/syncthing
     container_name: syncthing
+    env_file:
+      - ../.env
+      - .env-overwrite
     environment:
       - PUID=1000
       - PGID=1000
