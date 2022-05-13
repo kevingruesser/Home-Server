@@ -3,6 +3,9 @@ services:
     vaultwarden:
         image: vaultwarden/server:${VAULTWARDEN_TAG}
         container_name: Vaultwarden
+        env_file:
+         - ../.env
+         - .env-overwrite
         ports:
          - 81:80
         networks:
