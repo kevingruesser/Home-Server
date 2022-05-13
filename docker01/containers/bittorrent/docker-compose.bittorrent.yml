@@ -3,6 +3,9 @@ services:
   transmission:
     image: lscr.io/linuxserver/transmission
     container_name: transmission
+    env_file:
+      - ../.env
+      - .env-overwrite
     environment:
       - PUID=1000
       - PGID=1000
