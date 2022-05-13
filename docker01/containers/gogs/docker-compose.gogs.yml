@@ -3,6 +3,10 @@ services:
     postgres:
       image: postgres:9.5
       restart: always
+      container_name: GOGS_DB
+      env_file:
+      - ../.env
+      - .env-overwrite
       environment:
        - "POSTGRES_USER=${POSTGRES_USER}"
        - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
@@ -15,6 +19,10 @@ services:
     gogs:
       image: gogs/gogs:${VERSION_TAG}
       restart: always
+      container_name: GOGS
+      env_file:
+      - ../.env
+      - .env-overwrite
       ports:
        - "10022:22"
        - "3000:3000"
