@@ -4,6 +4,9 @@ services:
   ftpd_server:
     image: stilliard/pure-ftpd
     container_name: pure-ftpd
+    env_file:
+      - ../.env
+      - .env-overwrite
     ports:
       - "21:21"
       - "30000-30009:30000-30009"
