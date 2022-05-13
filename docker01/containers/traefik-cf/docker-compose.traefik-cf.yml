@@ -2,7 +2,10 @@ version: "3"
 services:
   traefik:
     image: traefik:${TRAEFIK_TAG}
-    container_name: "Traefik"
+    container_name: TRAEFIK
+    env_file:
+      - ../.env
+      - .env-overwrite
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
