@@ -2,6 +2,10 @@ version: '2'
 services:
     openhab:
       image: openhab/openhab:${VERSION_TAG}
+      container_name: OPENHAB
+      env_file:
+      - ../.env
+      - .env-overwrite
       restart: always
       networks:
        - traefik
