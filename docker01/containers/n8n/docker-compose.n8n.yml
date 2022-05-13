@@ -5,6 +5,9 @@ services:
   postgres:
     image: postgres:11
     container_name: n8n_db
+    env_file:
+      - ../.env
+      - .env-overwrite
     restart: always
     environment:
       - POSTGRES_USER
@@ -20,6 +23,9 @@ services:
   n8n:
     image: n8nio/n8n
     container_name: n8n
+    env_file:
+      - ../.env
+      - .env-overwrite
     restart: always
     environment:
       - DB_TYPE=postgresdb
