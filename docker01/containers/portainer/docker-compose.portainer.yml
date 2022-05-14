@@ -2,7 +2,7 @@ version: '3'
 
 services:
   portainer:
-    image: portainer/portainer-ce:${PORTAINER_TAG}
+    image: portainer/portainer-ce:${VERSION.PORTAINER}
     container_name: portainer
     env_file:
       - ../.env
@@ -18,19 +18,19 @@ services:
       - ./data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.routers.${SERVICE}-secure.tls=true"
-      - "traefik.http.routers.${SERVICE}-secure.service=portainer"
-      - "traefik.http.services.${SERVICE}.loadbalancer.server.port=9000"
+      - "traefik.http.routers.${SERVICE.PORTAINER}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE.PORTAINER}.rule=Host(`${CONTAINERURL.PORTAINER}`)"
+      - "traefik.http.middlewares.${SERVICE.PORTAINER}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE.PORTAINER}.middlewares=${SERVICE.PORTAINER}-https-redirect"
+      - "traefik.http.routers.${SERVICE.PORTAINER}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE.PORTAINER}-secure.rule=Host(`${CONTAINERURL.PORTAINER}`)"
+      - "traefik.http.routers.${SERVICE.PORTAINER}-secure.tls=true"
+      - "traefik.http.routers.${SERVICE.PORTAINER}-secure.service=portainer"
+      - "traefik.http.services.${SERVICE.PORTAINER}.loadbalancer.server.port=9000"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=Portainer"
-      - "flame.url=${CONTAINERURL}"
+      - "flame.url=${CONTAINERURL.PORTAINER}"
       - "flame.icon=docker"
 
 networks:

@@ -18,13 +18,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.http.routers.${SERVICE.FLAME}.entrypoints=http"
+      - "traefik.http.routers.${SERIVCE.FLAME}.rule=Host(`${CONTAINERURL.FLAME}`)"
+      - "traefik.http.middlewares.${SERIVCE.FLAME}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERIVCE.FLAME}.middlewares=${SERIVCE.FLAME}-https-redirect"
+      - "traefik.http.routers.${SERIVCE.FLAME}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERIVCE.FLAME}-secure.rule=Host(`${CONTAINERURL.FLAME}`)"
+      - "traefik.http.routers.${SERIVCE.FLAME}-secure.tls=true"
       - "traefik.docker.network=traefik"
     environment:
       - PASSWORD_FILE=/run/secrets/password # optional but required for (1)

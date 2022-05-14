@@ -10,11 +10,11 @@ services:
       - .env-overwrite
     restart: always
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-      - POSTGRES_NON_ROOT_USER
-      - POSTGRES_NON_ROOT_PASSWORD
+      - POSTGRES_USER=${USER.POSTRGES.N8N}
+      - POSTGRES_PASSWORD=${PASSWORD.POSTGRES.N8N}
+      - POSTGRES_DB=${DB.POSTGRES.N8N}
+      - POSTGRES_NON_ROOT_USER=${NONROOT_USER.POSTGRES.N8N}
+      - POSTGRES_NON_ROOT_PASSWORD=${NONROOT_PASSWORD.POSTGRES.N8N}
     volumes:
       - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
     networks:
@@ -31,12 +31,9 @@ services:
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
-      - DB_POSTGRESDB_USER=${POSTGRES_NON_ROOT_USER}
-      - DB_POSTGRESDB_PASSWORD=${POSTGRES_NON_ROOT_PASSWORD}
-      - N8N_BASIC_AUTH_ACTIVE=true
-      - N8N_BASIC_AUTH_USER
-      - N8N_BASIC_AUTH_PASSWORD
+      - DB_POSTGRESDB_DATABASE=${DB.POSTGRES.N8N}
+      - DB_POSTGRESDB_USER=${NONROOT_USER.POSTGRES.N8N}
+      - DB_POSTGRESDB_PASSWORD=${NONROOT_PASSWORD.POSTGRES.N8N}
     ports:
       - 5678:5678
     links:
@@ -48,13 +45,13 @@ services:
       - n8n_bridge
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.http.routers.${SERVICE.N8N}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE.N8N}.rule=Host(`${CONTAINERURL.N8N}`)"
+      - "traefik.http.middlewares.${SERVICE.N8N}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE.N8N}.middlewares=${SERVICE.N8N}-https-redirect"
+      - "traefik.http.routers.${SERVICE.N8N}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE.N8N}-secure.rule=Host(`${CONTAINERURL.N8N}`)"
+      - "traefik.http.routers.${SERVICE.N8N}-secure.tls=true"
       - "traefik.docker.network=traefik"
     # Wait 5 seconds to start n8n to make sure that PostgreSQL is ready
     # when n8n tries to connect to it

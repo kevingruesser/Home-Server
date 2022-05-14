@@ -8,8 +8,8 @@ services:
        - ../.env
        - .env-overwrite
       environment:
-       - "POSTGRES_USER=${POSTGRES_USER}"
-       - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+       - "POSTGRES_USER=${USER.POSTGRES.GOGS}"
+       - "POSTGRES_PASSWORD=${PASSWORD.POSTGRES.GOGS}"
        - "POSTGRES_DB=gogs"
       volumes:
        - "db-data:/var/lib/postgresql/data"
@@ -17,7 +17,7 @@ services:
        - gogs
        - database_bridge
     gogs:
-      image: gogs/gogs:${VERSION_TAG}
+      image: gogs/gogs:${VERSION.GOGS}
       restart: always
       container_name: GOGS
       env_file:
@@ -37,18 +37,18 @@ services:
        - "gogs-data:/data"
       labels:
        - "traefik.enable=true"
-       - "traefik.http.routers.${SERVICE}.entrypoints=http"
-       - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-       - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-       - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-       - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-       - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-       - "traefik.http.routers.${SERVICE}-secure.tls=true"
+       - "traefik.http.routers.${SERVICE.GOGS}.entrypoints=http"
+       - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL.GOGS}`)"
+       - "traefik.http.middlewares.${SERVICE.GOGS}-https-redirect.redirectscheme.scheme=https"
+       - "traefik.http.routers.${SERVICE.GOGS}.middlewares=${SERVICE.GOGS}-https-redirect"
+       - "traefik.http.routers.${SERVICE.GOGS}-secure.entrypoints=https"
+       - "traefik.http.routers.${SERVICE.GOGS}-secure.rule=Host(`${CONTAINERURL.GOGS}`)"
+       - "traefik.http.routers.${SERVICE.GOGS}-secure.tls=true"
        - "traefik.docker.network=traefik"
-       - "traefik.http.services.${SERVICE}.loadbalancer.server.port=3000"
+       - "traefik.http.services.${SERVICE.GOGS}.loadbalancer.server.port=3000"
        - "flame.type=application"
        - "flame.name=Git"
-       - "flame.url=${CONTAINERURL}"
+       - "flame.url=${CONTAINERURL.GOGS}"
        - "flame.icon=git"
       depends_on:
        - postgres

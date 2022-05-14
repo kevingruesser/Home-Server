@@ -11,8 +11,8 @@ services:
       - PGID=1000
       - TZ=Europe/Berlin
       - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
-      - USER=${USERNAME} #optional
-      - PASS=${PASSWORD} #optional
+      - USER=${USERNAME.BITTORENT} #optional
+      - PASS=${PASSWORD.BITTORENT} #optional
       #- WHITELIST=iplist #optional
       #- HOST_WHITELIST=dnsnane list #optional
     volumes:
@@ -28,18 +28,18 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.http.routers.${SERVICE.BITTORRENT}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE.BITTORRENT}.rule=Host(`${CONTAINERURL.BITTORRENT}`)"
+      - "traefik.http.middlewares.${SERVICE.BITTORRENT}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE.BITTORRENT}.middlewares=${SERVICE.BITTORRENT}-https-redirect"
+      - "traefik.http.routers.${SERVICE.BITTORRENT}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE.BITTORRENT}-secure.rule=Host(`${CONTAINERURL.BITTORRENT}`)"
+      - "traefik.http.routers.${SERVICE.BITTORRENT}-secure.tls=true"
       - "traefik.docker.network=traefik"
 
   syncthing:
     image: lscr.io/linuxserver/syncthing
-    container_name: syncthing_${SERVICE}
+    container_name: ${SERVICE.BITTORRENT}_SYNCTHING
     env_file:
       - ../.env
       - .env-overwrite
@@ -60,14 +60,14 @@ services:
       - traefik
     labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.${SYNCSERVICE}.entrypoints=http"
-          - "traefik.http.routers.${SYNCSERVICE}.rule=Host(`${CONTAINERSYNCURL}`)"
-          - "traefik.http.middlewares.${SYNCSERVICE}-https-redirect.redirectscheme.scheme=https"
-          - "traefik.http.routers.${SYNCSERVICE}.middlewares=${SERVICE}-https-redirect"
-          - "traefik.http.routers.${SYNCSERVICE}-secure.entrypoints=https"
-          - "traefik.http.routers.${SYNCSERVICE}-secure.rule=Host(`${CONTAINERSYNCURL}`)"
-          - "traefik.http.routers.${SYNCSERVICE}-secure.tls=true"
-          - "traefik.http.services.${SYNCSERVICE}.loadbalancer.server.port=8384"
+          - "traefik.http.routers.${SERIVCE.BITTORRENT.SYNCTHING}.entrypoints=http"
+          - "traefik.http.routers.${SERIVCE.BITTORRENT.SYNCTHING}.rule=Host(`${CONTAINERURL.BITTORRENT.SYNCTHING}`)"
+          - "traefik.http.middlewares.${SERIVCE.BITTORRENT.SYNCTHING}-https-redirect.redirectscheme.scheme=https"
+          - "traefik.http.routers.${SERIVCE.BITTORRENT.SYNCTHING}.middlewares=${SERIVCE.BITTORRENT.SYNCTHING}-https-redirect"
+          - "traefik.http.routers.${SERIVCE.BITTORRENT.SYNCTHING}-secure.entrypoints=https"
+          - "traefik.http.routers.${SERIVCE.BITTORRENT.SYNCTHING}-secure.rule=Host(`${CONTAINERURL.BITTORRENT.SYNCTHING}`)"
+          - "traefik.http.routers.${SERIVCE.BITTORRENT.SYNCTHING}-secure.tls=true"
+          - "traefik.http.services.${SERIVCE.BITTORRENT.SYNCTHING}.loadbalancer.server.port=8384"
 
 networks:
     traefik:

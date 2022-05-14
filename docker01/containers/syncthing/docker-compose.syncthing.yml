@@ -24,14 +24,14 @@ services:
       - traefik
     labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.${SERVICE}.entrypoints=http"
-          - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-          - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-          - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-          - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-          - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-          - "traefik.http.routers.${SERVICE}-secure.tls=true"
-          - "traefik.http.services.${SERVICE}.loadbalancer.server.port=8384"
+          - "traefik.http.routers.${SERVICE.SYNCTHING}.entrypoints=http"
+          - "traefik.http.routers.${SERVICE.SYNCTHING}.rule=Host(`${CONTAINERURL.SYNCTHING}`)"
+          - "traefik.http.middlewares.${SERVICE.SYNCTHING}-https-redirect.redirectscheme.scheme=https"
+          - "traefik.http.routers.${SERVICE.SYNCTHING}.middlewares=${SERVICE.SYNCTHING}-https-redirect"
+          - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.entrypoints=https"
+          - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.rule=Host(`${CONTAINERURL.SYNCTHING}`)"
+          - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.tls=true"
+          - "traefik.http.services.${SERVICE.SYNCTHING}.loadbalancer.server.port=8384"
 networks:
   traefik:
     external: true

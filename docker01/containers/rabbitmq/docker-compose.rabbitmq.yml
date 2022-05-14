@@ -14,24 +14,24 @@ services:
        - mqtt
     labels:
        - "traefik.enable=true"
-       - "traefik.http.routers.${SERVICE}.entrypoints=http"
-       - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-       - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-       - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-       - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-       - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-       - "traefik.http.routers.${SERVICE}-secure.tls=true"
+       - "traefik.http.routers.${SERVICE.RABBITMQ}.entrypoints=http"
+       - "traefik.http.routers.${SERVICE.RABBITMQ}.rule=Host(`${CONTAINERURL.RABBITMQ}`)"
+       - "traefik.http.middlewares.${SERVICE.RABBITMQ}-https-redirect.redirectscheme.scheme=https"
+       - "traefik.http.routers.${SERVICE.RABBITMQ}.middlewares=${SERVICE.RABBITMQ}-https-redirect"
+       - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.entrypoints=https"
+       - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.rule=Host(`${CONTAINERURL.RABBITMQ}`)"
+       - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.tls=true"
        - "traefik.docker.network=traefik"
-       - "traefik.http.services.${SERVICE}.loadbalancer.server.port=3000"
+       - "traefik.http.services.${SERVICE.RABBITMQ}.loadbalancer.server.port=3000"
 
-       - "traefik.tcp.routers.${CONTAINER_RABBITMQ_NAME}_mqtt.rule=HostSNI(`*`)"
-       - "traefik.tcp.services.${CONTAINER_RABBITMQ_NAME}_mqtt.loadbalancer.server.port=1883"
-       - "traefik.tcp.routers.${CONTAINER_RABBITMQ_NAME}_mqtt.entrypoints=mqtt"
-       - "traefik.tcp.routers.${CONTAINER_RABBITMQ_NAME}_mqtt.service=${CONTAINER_RABBITMQ_NAME}_mqtt"
+       - "traefik.tcp.routers.${SERVICE.RABBITMQ}_mqtt.rule=HostSNI(`*`)"
+       - "traefik.tcp.services.${SERVICE.RABBITMQ}_mqtt.loadbalancer.server.port=1883"
+       - "traefik.tcp.routers.${SERVICE.RABBITMQ}_mqtt.entrypoints=mqtt"
+       - "traefik.tcp.routers.${SERVICE.RABBITMQ}_mqtt.service=${SERVICE.RABBITMQ}_mqtt"
        
        - "flame.type=application"
        - "flame.name=Git"
-       - "flame.url=${CONTAINERURL}"
+       - "flame.url=${CONTAINERURL.RABBITMQ}"
        - "flame.icon=git"
 
 networks:

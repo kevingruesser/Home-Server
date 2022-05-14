@@ -17,17 +17,17 @@ services:
       - node-red-data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-      - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-      - "traefik.http.routers.${SERVICE}-secure.tls=true"
+      - "traefik.http.routers.${SERVICE.NODERED}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE.NODERED}.rule=Host(`${CONTAINERURL.NODERED}`)"
+      - "traefik.http.middlewares.${SERVICE.NODERED}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE.NODERED}.middlewares=${SERVICE.NODERED}-https-redirect"
+      - "traefik.http.routers.${SERVICE.NODERED}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE.NODERED}-secure.rule=Host(`${CONTAINERURL.NODERED}`)"
+      - "traefik.http.routers.${SERVICE.NODERED}-secure.tls=true"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=NodeRed"
-      - "flame.url=${CONTAINERURL}"
+      - "flame.url=${CONTAINERURL.NODERED}"
       - "flame.icon=format-text-wrapping-overflow"
 
 volumes:
