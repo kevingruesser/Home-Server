@@ -14,6 +14,8 @@ services:
     ports:
       - 80:80
       - 443:443
+      # RabbitMQ MQTT
+      - 1883:1883
     environment:
       - CF_API_EMAIL=${CLOUDFLAREMAIL}
       - CF_DNS_API_TOKEN=${CLOUDFLARETOKEN}
