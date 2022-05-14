@@ -1,0 +1,41 @@
+version: "3.4"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'RABBITMQ'
+    volumes:
+       - ./data/rabbitmq/:/var/lib/rabbitmq/
+       - ./data/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    expose:
+       - 15672
+       - 1883
+    networks:
+       - traefik
+       - mqtt
+    labels:
+       - "traefik.enable=true"
+       - "traefik.http.routers.${SERVICE}.entrypoints=http"
+       - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
+       - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
+       - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
+       - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
+       - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
+       - "traefik.http.routers.${SERVICE}-secure.tls=true"
+       - "traefik.docker.network=traefik"
+       - "traefik.http.services.${SERVICE}.loadbalancer.server.port=3000"
+
+       - "traefik.tcp.routers.${CONTAINER_RABBITMQ_NAME}_mqtt.rule=HostSNI(`*`)"
+       - "traefik.tcp.services.${CONTAINER_RABBITMQ_NAME}_mqtt.loadbalancer.server.port=1883"
+       - "traefik.tcp.routers.${CONTAINER_RABBITMQ_NAME}_mqtt.entrypoints=mqtt"
+       - "traefik.tcp.routers.${CONTAINER_RABBITMQ_NAME}_mqtt.service=${CONTAINER_RABBITMQ_NAME}_mqtt"
+       
+       - "flame.type=application"
+       - "flame.name=Git"
+       - "flame.url=${CONTAINERURL}"
+       - "flame.icon=git"
+
+networks:
+  traefik:
+    external: true
+  mqtt:
+    external: true
