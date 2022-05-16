@@ -30,9 +30,9 @@ services:
        - "traefik.tcp.routers.${SERVICE.RABBITMQ}_mqtt.service=${SERVICE.RABBITMQ}_mqtt"
        
        - "flame.type=application"
-       - "flame.name=Git"
+       - "flame.name=RabbitMQ"
        - "flame.url=${CONTAINERURL.RABBITMQ}"
-       - "flame.icon=git"
+       - "flame.icon=protocol"
 
 networks:
   traefik:

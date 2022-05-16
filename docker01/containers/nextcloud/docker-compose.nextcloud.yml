@@ -28,6 +28,10 @@ services:
       - "traefik.http.routers.${SERVICE.NEXTCLOUD}-secure.tls=true"
       - "traefik.http.services.${SERVICE.NEXTCLOUD}.loadBalancer.server.port=443"
       - "traefik.http.services.${SERVICE.NEXTCLOUD}.loadBalancer.server.scheme=https"
+      - "flame.type=application"
+      - "flame.name=Nextcloud"
+      - "flame.url=${CONTAINERURL.NEXTCLOUD}"
+      - "flame.icon=cloud-download"
     restart: unless-stopped
 
 networks:

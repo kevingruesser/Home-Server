@@ -26,6 +26,10 @@ services:
       - "traefik.http.routers.${SERVICE.UPTIMEKUMA}-secure.entrypoints=https"
       - "traefik.http.routers.${SERVICE.UPTIMEKUMA}-secure.rule=Host(`${CONTAINERURL.UPTIMEKUMA}`)"
       - "traefik.http.routers.${SERVICE.UPTIMEKUMA}-secure.tls=true"
+      - "flame.type=application"
+      - "flame.name=Uptime-Kuma"
+      - "flame.url=${CONTAINERURL.UPTIMEKUMA}"
+      - "flame.icon=alarm-light-outline"
 
 networks:
   traefik:

@@ -24,6 +24,10 @@ services:
       - "traefik.http.routers.${SERVICE.HOMEASSISTANT}-secure.tls=true"
       - "traefik.http.services.${SERVICE.HOMEASSISTANT}.loadbalancer.server.port=8123"
       - "traefik.docker.network=traefik"
+      - "flame.type=application"
+      - "flame.name=HomeAssistant"
+      - "flame.url=${CONTAINERURL.HOMEASSISTANT}"
+      - "flame.icon=home-automation"
     networks:
       - traefik
     #network_mode: host

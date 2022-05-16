@@ -23,15 +23,19 @@ services:
     networks:
       - traefik
     labels:
-          - "traefik.enable=true"
-          - "traefik.http.routers.${SERVICE.SYNCTHING}.entrypoints=http"
-          - "traefik.http.routers.${SERVICE.SYNCTHING}.rule=Host(`${CONTAINERURL.SYNCTHING}`)"
-          - "traefik.http.middlewares.${SERVICE.SYNCTHING}-https-redirect.redirectscheme.scheme=https"
-          - "traefik.http.routers.${SERVICE.SYNCTHING}.middlewares=${SERVICE.SYNCTHING}-https-redirect"
-          - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.entrypoints=https"
-          - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.rule=Host(`${CONTAINERURL.SYNCTHING}`)"
-          - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.tls=true"
-          - "traefik.http.services.${SERVICE.SYNCTHING}.loadbalancer.server.port=8384"
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE.SYNCTHING}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE.SYNCTHING}.rule=Host(`${CONTAINERURL.SYNCTHING}`)"
+      - "traefik.http.middlewares.${SERVICE.SYNCTHING}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE.SYNCTHING}.middlewares=${SERVICE.SYNCTHING}-https-redirect"
+      - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.rule=Host(`${CONTAINERURL.SYNCTHING}`)"
+      - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.tls=true"
+      - "traefik.http.services.${SERVICE.SYNCTHING}.loadbalancer.server.port=8384"
+      - "flame.type=application"
+      - "flame.name=Syncthing"
+      - "flame.url=${CONTAINERURL.SYNCTHING}"
+      - "flame.icon=cloud-sync-outline"
 networks:
   traefik:
     external: true
