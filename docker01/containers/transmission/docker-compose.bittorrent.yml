@@ -1,0 +1,83 @@
+version: "2.1"
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission
+    container_name: ${CONTAINER_NAME.TRANSMISSON}
+    env_file:
+      - ../.env
+      - .env-overwrite
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+      - USER=${USERNAME.TRANSMISSON} #optional
+      - PASS=${PASSWORD.TRANSMISSON} #optional
+      #- WHITELIST=iplist #optional
+      #- HOST_WHITELIST=dnsnane list #optional
+    volumes:
+      - ./data/config:/config
+      - ./data/downloads:/downloads
+      - ./data/watch:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE.TRANSMISSON}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE.TRANSMISSON}.rule=Host(`${CONTAINERURL.TRANSMISSON}`)"
+      - "traefik.http.middlewares.${SERVICE.TRANSMISSON}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE.TRANSMISSON}.middlewares=${SERVICE.TRANSMISSON}-https-redirect"
+      - "traefik.http.routers.${SERVICE.TRANSMISSON}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE.TRANSMISSON}-secure.rule=Host(`${CONTAINERURL.TRANSMISSON}`)"
+      - "traefik.http.routers.${SERVICE.TRANSMISSON}-secure.tls=true"
+      - "traefik.docker.network=traefik"
+      - "flame.type=application"
+      - "flame.name=BitTorrent/Transmission"
+      - "flame.url=${CONTAINERURL.TRANSMISSON}"
+      - "flame.icon=home-download-box-outline"
+
+  syncthing:
+    image: lscr.io/linuxserver/syncthing
+    container_name: ${SERVICE.TRANSMISSON}_SYNCTHING
+    env_file:
+      - ../.env
+      - .env-overwrite
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Berlin
+    volumes:
+      - ./data/syncthin/config:/config
+      - ./data/downloads:/data1
+    ports:
+      - 8385:8384
+      - 22001:22000/tcp
+      - 22001:22000/udp
+      - 21028:21027/udp
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}.entrypoints=http"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}.rule=Host(`${CONTAINERURL.TRANSMISSON.SYNCTHING}`)"
+      - "traefik.http.middlewares.${SERIVCE.TRANSMISSON.SYNCTHING}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}.middlewares=${SERIVCE.TRANSMISSON.SYNCTHING}-https-redirect"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}-secure.rule=Host(`${CONTAINERURL.TRANSMISSON.SYNCTHING}`)"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}-secure.tls=true"
+      - "traefik.http.services.${SERIVCE.TRANSMISSON.SYNCTHING}.loadbalancer.server.port=8384"
+
+      - "flame.type=application"
+      - "flame.name=Syncthing -> Transmission"
+      - "flame.url=${CONTAINERURL.TRANSMISSON.SYNCTHING}"
+      - "flame.icon=autorenew"
+
+networks:
+    traefik:
+        external: true
