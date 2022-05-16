@@ -3,8 +3,8 @@ version: '3.1'
 services:
 
   postgres:
-    image: postgres:11
-    container_name: n8n_db
+    image: postgres:${TAG.POSTGRES.N8N}
+    container_name: ${CONTAINER_NAME.POSTGRES.N8N}
     env_file:
       - ../.env
       - .env-overwrite
@@ -21,8 +21,8 @@ services:
       - n8n_bridge
 
   n8n:
-    image: n8nio/n8n
-    container_name: n8n
+    image: n8nio/n8n:${TAG.N8N}
+    container_name: ${CONTAINER_NAME.N8N}
     env_file:
       - ../.env
       - .env-overwrite
@@ -46,16 +46,16 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICE.N8N}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.N8N}.rule=Host(`${CONTAINERURL.N8N}`)"
+      - "traefik.http.routers.${SERVICE.N8N}.rule=Host(`${SERVICE.N8N}.${FQDN}`)"
       - "traefik.http.middlewares.${SERVICE.N8N}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERVICE.N8N}.middlewares=${SERVICE.N8N}-https-redirect"
       - "traefik.http.routers.${SERVICE.N8N}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.N8N}-secure.rule=Host(`${CONTAINERURL.N8N}`)"
+      - "traefik.http.routers.${SERVICE.N8N}-secure.rule=Host(`${SERVICE.N8N}.${FQDN}`)"
       - "traefik.http.routers.${SERVICE.N8N}-secure.tls=true"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=N8N"
-      - "flame.url=${CONTAINERURL.N8N}"
+      - "flame.url=${SERVIVCE.N8N}.${FQDN}"
       - "flame.icon=home-automation"
     # Wait 5 seconds to start n8n to make sure that PostgreSQL is ready
     # when n8n tries to connect to it

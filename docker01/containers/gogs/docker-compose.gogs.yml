@@ -1,9 +1,9 @@
 version: '2'
 services:
     postgres:
-      image: postgres:9.5
+      image: postgres:${TAG.POSTGRES.GOGS}
       restart: always
-      container_name: GOGS_DB
+      container_name: ${CONTAINER_NAME.POSTGRES.GOGS}
       env_file:
        - ../.env
        - .env-overwrite
@@ -17,9 +17,9 @@ services:
        - gogs
        - database_bridge
     gogs:
-      image: gogs/gogs:${VERSION.GOGS}
+      image: gogs/gogs:${TAG.GOGS}
       restart: always
-      container_name: GOGS
+      container_name: ${CONTAINER_NAME.GOGS}
       env_file:
        - ../.env
        - .env-overwrite
@@ -38,17 +38,17 @@ services:
       labels:
        - "traefik.enable=true"
        - "traefik.http.routers.${SERVICE.GOGS}.entrypoints=http"
-       - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL.GOGS}`)"
+       - "traefik.http.routers.${SERVICE}.rule=Host(`${SERVICE.GOGS}.${FQDN}`)"
        - "traefik.http.middlewares.${SERVICE.GOGS}-https-redirect.redirectscheme.scheme=https"
        - "traefik.http.routers.${SERVICE.GOGS}.middlewares=${SERVICE.GOGS}-https-redirect"
        - "traefik.http.routers.${SERVICE.GOGS}-secure.entrypoints=https"
-       - "traefik.http.routers.${SERVICE.GOGS}-secure.rule=Host(`${CONTAINERURL.GOGS}`)"
+       - "traefik.http.routers.${SERVICE.GOGS}-secure.rule=Host(`${SERVICE.GOGS}.${FQDN}`)"
        - "traefik.http.routers.${SERVICE.GOGS}-secure.tls=true"
        - "traefik.docker.network=traefik"
        - "traefik.http.services.${SERVICE.GOGS}.loadbalancer.server.port=3000"
        - "flame.type=application"
        - "flame.name=Git"
-       - "flame.url=${CONTAINERURL.GOGS}"
+       - "flame.url=${SERVICE.GOGS}.${FQDN}"
        - "flame.icon=git"
       depends_on:
        - postgres

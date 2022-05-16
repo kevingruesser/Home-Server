@@ -2,8 +2,8 @@ version: '3.6'
 
 services:
   flame:
-    image: pawelmalak/flame
-    container_name: flame
+    image: pawelmalak/flame:${TAG.FLAME}
+    container_name: ${CONTAINER_NAME.FLAME}
     env_file:
       - ../.env
       - .env-overwrite
@@ -19,11 +19,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICE.FLAME}.entrypoints=http"
-      - "traefik.http.routers.${SERIVCE.FLAME}.rule=Host(`${CONTAINERURL.FLAME}`)"
+      - "traefik.http.routers.${SERIVCE.FLAME}.rule=Host(`${SERIVCE.FLAME}.${FQDN}`)"
       - "traefik.http.middlewares.${SERIVCE.FLAME}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERIVCE.FLAME}.middlewares=${SERIVCE.FLAME}-https-redirect"
       - "traefik.http.routers.${SERIVCE.FLAME}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERIVCE.FLAME}-secure.rule=Host(`${CONTAINERURL.FLAME}`)"
+      - "traefik.http.routers.${SERIVCE.FLAME}-secure.rule=Host(`${SERIVCE.FLAME}.${FQDN}`)"
       - "traefik.http.routers.${SERIVCE.FLAME}-secure.tls=true"
       - "traefik.docker.network=traefik"
     environment:

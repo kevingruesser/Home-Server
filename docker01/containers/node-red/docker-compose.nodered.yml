@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   node-red:
-    image: nodered/node-red:latest
+    image: nodered/node-red:${TAG.NODERED}
     container_name: NODE-RED
     env_file:
       - ../.env
@@ -18,16 +18,16 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICE.NODERED}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.NODERED}.rule=Host(`${CONTAINERURL.NODERED}`)"
+      - "traefik.http.routers.${SERVICE.NODERED}.rule=Host(`${SERVICE.NODERED}.${FQDN}`)"
       - "traefik.http.middlewares.${SERVICE.NODERED}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERVICE.NODERED}.middlewares=${SERVICE.NODERED}-https-redirect"
       - "traefik.http.routers.${SERVICE.NODERED}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.NODERED}-secure.rule=Host(`${CONTAINERURL.NODERED}`)"
+      - "traefik.http.routers.${SERVICE.NODERED}-secure.rule=Host(`${SERVICE.NODERED}.${FQDN}`)"
       - "traefik.http.routers.${SERVICE.NODERED}-secure.tls=true"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=NodeRed"
-      - "flame.url=${CONTAINERURL.NODERED}"
+      - "flame.url=${SERVICE.NODERED}.${FQDN}"
       - "flame.icon=format-text-wrapping-overflow"
 
 volumes:

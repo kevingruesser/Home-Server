@@ -1,8 +1,8 @@
 version: "2.1"
 services:
   syncthing:
-    image: lscr.io/linuxserver/syncthing
-    container_name: syncthing
+    image: lscr.io/linuxserver/syncthing:${TAG.SYNCTHING}
+    container_name: ${CONTAINER_NAME.SYNCTHING}
     env_file:
       - ../.env
       - .env-overwrite
@@ -25,16 +25,16 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICE.SYNCTHING}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.SYNCTHING}.rule=Host(`${CONTAINERURL.SYNCTHING}`)"
+      - "traefik.http.routers.${SERVICE.SYNCTHING}.rule=Host(`${SERVICE.SYNCTHING}.${FQDN}`)"
       - "traefik.http.middlewares.${SERVICE.SYNCTHING}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERVICE.SYNCTHING}.middlewares=${SERVICE.SYNCTHING}-https-redirect"
       - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.rule=Host(`${CONTAINERURL.SYNCTHING}`)"
+      - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.rule=Host(`${SERVICE.SYNCTHING}.${FQDN}`)"
       - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.tls=true"
       - "traefik.http.services.${SERVICE.SYNCTHING}.loadbalancer.server.port=8384"
       - "flame.type=application"
       - "flame.name=Syncthing"
-      - "flame.url=${CONTAINERURL.SYNCTHING}"
+      - "flame.url=${SERVICE.SYNCTHING}.${FQDN}"
       - "flame.icon=cloud-sync-outline"
 networks:
   traefik:

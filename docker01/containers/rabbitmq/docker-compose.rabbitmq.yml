@@ -1,8 +1,8 @@
 version: "3.4"
 services:
   rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: 'RABBITMQ'
+    image: rabbitmq:${TAG.RABBITMQ}
+    container_name: ${CONTAINER_NAME.RABBITMQ}
     volumes:
        - ./data/rabbitmq/:/var/lib/rabbitmq/
        - ./data/enabled_plugins:/etc/rabbitmq/enabled_plugins
@@ -15,11 +15,11 @@ services:
     labels:
        - "traefik.enable=true"
        - "traefik.http.routers.${SERVICE.RABBITMQ}.entrypoints=http"
-       - "traefik.http.routers.${SERVICE.RABBITMQ}.rule=Host(`${CONTAINERURL.RABBITMQ}`)"
+       - "traefik.http.routers.${SERVICE.RABBITMQ}.rule=Host(`${SERVICE.RABBITMQ}.${FQDN}`)"
        - "traefik.http.middlewares.${SERVICE.RABBITMQ}-https-redirect.redirectscheme.scheme=https"
        - "traefik.http.routers.${SERVICE.RABBITMQ}.middlewares=${SERVICE.RABBITMQ}-https-redirect"
        - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.entrypoints=https"
-       - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.rule=Host(`${CONTAINERURL.RABBITMQ}`)"
+       - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.rule=Host(`${SERVICE.RABBITMQ}.${FQDN}`)"
        - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.tls=true"
        - "traefik.docker.network=traefik"
        - "traefik.http.services.${SERVICE.RABBITMQ}.loadbalancer.server.port=3000"
@@ -31,7 +31,7 @@ services:
        
        - "flame.type=application"
        - "flame.name=RabbitMQ"
-       - "flame.url=${CONTAINERURL.RABBITMQ}"
+       - "flame.url=${SERVICE.RABBITMQ}.${FQDN}"
        - "flame.icon=protocol"
 
 networks:

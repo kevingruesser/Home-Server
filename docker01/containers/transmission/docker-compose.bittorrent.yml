@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   transmission:
-    image: lscr.io/linuxserver/transmission
+    image: lscr.io/linuxserver/transmission:${TAG.TRANSMISSION}
     container_name: ${CONTAINER_NAME.TRANSMISSON}
     env_file:
       - ../.env
@@ -29,11 +29,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICE.TRANSMISSON}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.TRANSMISSON}.rule=Host(`${CONTAINERURL.TRANSMISSON}`)"
+      - "traefik.http.routers.${SERVICE.TRANSMISSON}.rule=Host(`${SERVICE.TRANSMISSON}.${FQDN}`)"
       - "traefik.http.middlewares.${SERVICE.TRANSMISSON}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERVICE.TRANSMISSON}.middlewares=${SERVICE.TRANSMISSON}-https-redirect"
       - "traefik.http.routers.${SERVICE.TRANSMISSON}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.TRANSMISSON}-secure.rule=Host(`${CONTAINERURL.TRANSMISSON}`)"
+      - "traefik.http.routers.${SERVICE.TRANSMISSON}-secure.rule=Host(`${SERVICE.TRANSMISSON}.${FQDN}`)"
       - "traefik.http.routers.${SERVICE.TRANSMISSON}-secure.tls=true"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
@@ -64,18 +64,18 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}.entrypoints=http"
-      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}.rule=Host(`${CONTAINERURL.TRANSMISSON.SYNCTHING}`)"
-      - "traefik.http.middlewares.${SERIVCE.TRANSMISSON.SYNCTHING}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}.middlewares=${SERIVCE.TRANSMISSON.SYNCTHING}-https-redirect"
-      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}-secure.rule=Host(`${CONTAINERURL.TRANSMISSON.SYNCTHING}`)"
-      - "traefik.http.routers.${SERIVCE.TRANSMISSON.SYNCTHING}-secure.tls=true"
-      - "traefik.http.services.${SERIVCE.TRANSMISSON.SYNCTHING}.loadbalancer.server.port=8384"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON}_sync.entrypoints=http"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON}_sync.rule=Host(`${SERVICE.TRANSMISSON}_sync.${FQDN}`)"
+      - "traefik.http.middlewares.${SERIVCE.TRANSMISSON}_sync-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON}_sync.middlewares=${SERIVCE.TRANSMISSON}_sync-https-redirect"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON}_sync-secure.entrypoints=https"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON}_sync-secure.rule=Host(`${SERVICE.TRANSMISSON}_sync.${FQDN}`)"
+      - "traefik.http.routers.${SERIVCE.TRANSMISSON}_sync-secure.tls=true"
+      - "traefik.http.services.${SERIVCE.TRANSMISSON}_sync.loadbalancer.server.port=8384"
 
       - "flame.type=application"
       - "flame.name=Syncthing -> Transmission"
-      - "flame.url=${CONTAINERURL.TRANSMISSON.SYNCTHING}"
+      - "flame.url=${SERVICE.TRANSMISSON}_sync.${FQDN}"
       - "flame.icon=autorenew"
 
 networks:

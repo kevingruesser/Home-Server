@@ -1,8 +1,8 @@
 version: '3'
 services:
   homeassistant:
-    image: "ghcr.io/home-assistant/home-assistant:stable"
-    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:${TAG.HOMEASSISTANT}"
+    container_name: ${CONTAINER_NAME.HOMEASSISTANT}
     env_file:
       - ../.env
       - .env-overwrite
@@ -16,17 +16,17 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICE.HOMEASSISTANT}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}.rule=Host(`${CONTAINERURL.HOMEASSISTANT}`)"
+      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}.rule=Host(`${SERVICE.HOMEASSISTANT}.${FQDN}`)"
       - "traefik.http.middlewares.${SERVICE.HOMEASSISTANT}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERVICE.HOMEASSISTANT}.middlewares=${SERVICE}-https-redirect"
       - "traefik.http.routers.${SERVICE.HOMEASSISTANT}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}-secure.rule=Host(`${CONTAINERURL.HOMEASSISTANT}`)"
+      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}-secure.rule=Host(`${SERVICE.HOMEASSISTANT}.${FQDN}`)"
       - "traefik.http.routers.${SERVICE.HOMEASSISTANT}-secure.tls=true"
       - "traefik.http.services.${SERVICE.HOMEASSISTANT}.loadbalancer.server.port=8123"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=HomeAssistant"
-      - "flame.url=${CONTAINERURL.HOMEASSISTANT}"
+      - "flame.url=${SERVICE.HOMEASSISTANT}.${FQDN}"
       - "flame.icon=home-automation"
     networks:
       - traefik

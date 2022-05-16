@@ -2,8 +2,8 @@ version: '3.6'
 
 services:
   dbeaver:
-    image: dbeaver/cloudbeaver:${VERSION.CLOUDBEAVER}
-    container_name: DBEAVER
+    image: dbeaver/cloudbeaver:${TAG.CLOUDBEAVER}
+    container_name: ${CONTAINER_NAME.CLOUDBEAVER}
     env_file:
       - ../.env
       - .env-overwrite
@@ -17,16 +17,16 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${SERVICE.CLOUDBEAVER}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.CLOUDBEAVER}.rule=Host(`${CONTAINERURL.CLOUDBEAVER}`)"
+      - "traefik.http.routers.${SERVICE.CLOUDBEAVER}.rule=Host(`${SERVICE.CLOUDBEAVER}.${FQDN}`)"
       - "traefik.http.middlewares.${SERVICE.CLOUDBEAVER}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERVICE.CLOUDBEAVER}.middlewares=${SERVICE.CLOUDBEAVER}-https-redirect"
       - "traefik.http.routers.${SERVICE.CLOUDBEAVER}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.CLOUDBEAVER}-secure.rule=Host(`${CONTAINERURL.CLOUDBEAVER}`)"
+      - "traefik.http.routers.${SERVICE.CLOUDBEAVER}-secure.rule=Host(`${SERVICE.CLOUDBEAVER}.${FQDN}`)"
       - "traefik.http.routers.${SERVICE.CLOUDBEAVER}-secure.tls=true"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=DBeaver"
-      - "flame.url=${CONTAINERURL.CLOUDBEAVER}"
+      - "flame.url=${SERVICE.CLOUDBEAVER}.${FQDN}"
       - "flame.icon=database"
     restart: unless-stopped
 

@@ -2,7 +2,7 @@ version: "3"
 services:
     vaultwarden:
         image: vaultwarden/server:${TAG.VAULTWARDEN}
-        container_name: Vaultwarden
+        container_name: ${CONTAINER_NAME.VAULTWARDEN}
         env_file:
          - ../.env
          - .env-overwrite
@@ -13,15 +13,15 @@ services:
         labels:
           - "traefik.enable=true"
           - "traefik.http.routers.${SERVICE.VAULTWARDEN}.entrypoints=http"
-          - "traefik.http.routers.${SERVICE.VAULTWARDEN}.rule=Host(`${CONTAINERURL.VAULTWARDEN}`)"
+          - "traefik.http.routers.${SERVICE.VAULTWARDEN}.rule=Host(`${SERVICE.VAULTWARDEN}.${FQDN}`)"
           - "traefik.http.middlewares.${SERVICE.VAULTWARDEN}-https-redirect.redirectscheme.scheme=https"
           - "traefik.http.routers.${SERVICE.VAULTWARDEN}.middlewares=${SERVICE.VAULTWARDEN}-https-redirect"
           - "traefik.http.routers.${SERVICE.VAULTWARDEN}-secure.entrypoints=https"
-          - "traefik.http.routers.${SERVICE.VAULTWARDEN}-secure.rule=Host(`${CONTAINERURL.VAULTWARDEN}`)"
+          - "traefik.http.routers.${SERVICE.VAULTWARDEN}-secure.rule=Host(`${SERVICE.VAULTWARDEN}.${FQDN}`)"
           - "traefik.http.routers.${SERVICE.VAULTWARDEN}-secure.tls=true"
           - "flame.type=application"
           - "flame.name=Vaultwarden"
-          - "flame.url=${CONTAINERURL.VAULTWARDEN}"
+          - "flame.url=${SERVICE.VAULTWARDEN}.${FQDN}"
           - "flame.icon=safe-square-outline"
         volumes:
           - ./data/:/data/

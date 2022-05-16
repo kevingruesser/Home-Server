@@ -2,8 +2,8 @@ version: '2.1'
 
 services:
   nextcloud:
-    image: lscr.io/linuxserver/nextcloud
-    container_name: nextcloud
+    image: lscr.io/linuxserver/nextcloud:${TAG.NEXTCLOUD}
+    container_name: ${CONTAINER_NAME.NEXTCLOUD}
     env_file:
       - ../.env
       - .env-overwrite
@@ -20,17 +20,17 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
       - "traefik.http.routers.${SERVICE.NEXTCLOUD}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.NEXTCLOUD}.rule=Host(`${CONTAINERURL.NEXTCLOUD}`)"
+      - "traefik.http.routers.${SERVICE.NEXTCLOUD}.rule=Host(`${SERVICE.NEXTCLOUD}.${FQDN}`)"
       - "traefik.http.middlewares.${SERVICE.NEXTCLOUD}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.${SERVICE.NEXTCLOUD}.middlewares=${SERVICE.NEXTCLOUD}-https-redirect"
       - "traefik.http.routers.${SERVICE.NEXTCLOUD}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.NEXTCLOUD}-secure.rule=Host(`${CONTAINERURL.NEXTCLOUD}`)"
+      - "traefik.http.routers.${SERVICE.NEXTCLOUD}-secure.rule=Host(`${SERVICE.NEXTCLOUD}.${FQDN}`)"
       - "traefik.http.routers.${SERVICE.NEXTCLOUD}-secure.tls=true"
       - "traefik.http.services.${SERVICE.NEXTCLOUD}.loadBalancer.server.port=443"
       - "traefik.http.services.${SERVICE.NEXTCLOUD}.loadBalancer.server.scheme=https"
       - "flame.type=application"
       - "flame.name=Nextcloud"
-      - "flame.url=${CONTAINERURL.NEXTCLOUD}"
+      - "flame.url=${SERVICE.NEXTCLOUD}.${FQDN}"
       - "flame.icon=cloud-download"
     restart: unless-stopped
 
