@@ -1,7 +1,7 @@
 version: "3"
 services:
     vaultwarden:
-        image: vaultwarden/server:${VAULTWARDEN_TAG}
+        image: vaultwarden/server:${TAG.VAULTWARDEN}
         container_name: Vaultwarden
         env_file:
          - ../.env
@@ -12,16 +12,16 @@ services:
          - traefik
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.${SERVICE}.entrypoints=http"
-          - "traefik.http.routers.${SERVICE}.rule=Host(`${CONTAINERURL}`)"
-          - "traefik.http.middlewares.${SERVICE}-https-redirect.redirectscheme.scheme=https"
-          - "traefik.http.routers.${SERVICE}.middlewares=${SERVICE}-https-redirect"
-          - "traefik.http.routers.${SERVICE}-secure.entrypoints=https"
-          - "traefik.http.routers.${SERVICE}-secure.rule=Host(`${CONTAINERURL}`)"
-          - "traefik.http.routers.${SERVICE}-secure.tls=true"
+          - "traefik.http.routers.${SERVICE.VAULTWARDEN}.entrypoints=http"
+          - "traefik.http.routers.${SERVICE.VAULTWARDEN}.rule=Host(`${CONTAINERURL.VAULTWARDEN}`)"
+          - "traefik.http.middlewares.${SERVICE.VAULTWARDEN}-https-redirect.redirectscheme.scheme=https"
+          - "traefik.http.routers.${SERVICE.VAULTWARDEN}.middlewares=${SERVICE.VAULTWARDEN}-https-redirect"
+          - "traefik.http.routers.${SERVICE.VAULTWARDEN}-secure.entrypoints=https"
+          - "traefik.http.routers.${SERVICE.VAULTWARDEN}-secure.rule=Host(`${CONTAINERURL.VAULTWARDEN}`)"
+          - "traefik.http.routers.${SERVICE.VAULTWARDEN}-secure.tls=true"
           - "flame.type=application"
           - "flame.name=Vaultwarden"
-          - "flame.url=${CONTAINERURL}"
+          - "flame.url=${CONTAINERURL.VAULTWARDEN}"
           - "flame.icon=safe-square-outline"
         volumes:
           - ./data/:/data/
