@@ -2,11 +2,8 @@ version: '3.6'
 
 services:
   flame:
-    image: pawelmalak/flame:${TAG.FLAME}
-    container_name: ${CONTAINER_NAME.FLAME}
-    env_file:
-      - ../.env
-      - .env-overwrite
+    image: pawelmalak/flame:${TAGFLAME}
+    container_name: ${CONTAINERNAMEFLAME}
     volumes:
       - ./data/app:/app/data
       - /var/run/docker.sock:/var/run/docker.sock # optional but required for Docker integration
@@ -18,13 +15,13 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE.FLAME}.entrypoints=http"
-      - "traefik.http.routers.${SERIVCE.FLAME}.rule=Host(`${SERIVCE.FLAME}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERIVCE.FLAME}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERIVCE.FLAME}.middlewares=${SERIVCE.FLAME}-https-redirect"
-      - "traefik.http.routers.${SERIVCE.FLAME}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERIVCE.FLAME}-secure.rule=Host(`${SERIVCE.FLAME}.${FQDN}`)"
-      - "traefik.http.routers.${SERIVCE.FLAME}-secure.tls=true"
+      - "traefik.http.routers.${SERVICEFLAME}.entrypoints=http"
+      - "traefik.http.routers.${SERIVCEFLAME}.rule=Host(`${SERIVCEFLAME}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERIVCEFLAME}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERIVCEFLAME}.middlewares=${SERIVCEFLAME}-https-redirect"
+      - "traefik.http.routers.${SERIVCEFLAME}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERIVCEFLAME}-secure.rule=Host(`${SERIVCEFLAME}.${FQDN}`)"
+      - "traefik.http.routers.${SERIVCEFLAME}-secure.tls=true"
       - "traefik.docker.network=traefik"
     environment:
       - PASSWORD_FILE=/run/secrets/password # optional but required for (1)
