@@ -1,11 +1,8 @@
 version: "2.1"
 services:
   syncthing:
-    image: lscr.io/linuxserver/syncthing:${TAG.SYNCTHING}
-    container_name: ${CONTAINER_NAME.SYNCTHING}
-    env_file:
-      - ../.env
-      - .env-overwrite
+    image: lscr.io/linuxserver/syncthing:${TAGSYNCTHING}
+    container_name: ${CONTAINERNAMESYNCTHING}
     environment:
       - PUID=1000
       - PGID=1000
@@ -24,17 +21,17 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE.SYNCTHING}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.SYNCTHING}.rule=Host(`${SERVICE.SYNCTHING}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERVICE.SYNCTHING}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE.SYNCTHING}.middlewares=${SERVICE.SYNCTHING}-https-redirect"
-      - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.rule=Host(`${SERVICE.SYNCTHING}.${FQDN}`)"
-      - "traefik.http.routers.${SERVICE.SYNCTHING}-secure.tls=true"
-      - "traefik.http.services.${SERVICE.SYNCTHING}.loadbalancer.server.port=8384"
+      - "traefik.http.routers.${SERVICESYNCTHING}.entrypoints=http"
+      - "traefik.http.routers.${SERVICESYNCTHING}.rule=Host(`${SERVICESYNCTHING}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICESYNCTHING}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICESYNCTHING}.middlewares=${SERVICESYNCTHING}-https-redirect"
+      - "traefik.http.routers.${SERVICESYNCTHING}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICESYNCTHING}-secure.rule=Host(`${SERVICESYNCTHING}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICESYNCTHING}-secure.tls=true"
+      - "traefik.http.services.${SERVICESYNCTHING}.loadbalancer.server.port=8384"
       - "flame.type=application"
       - "flame.name=Syncthing"
-      - "flame.url=${SERVICE.SYNCTHING}.${FQDN}"
+      - "flame.url=${SERVICESYNCTHING}.${FQDN}"
       - "flame.icon=cloud-sync-outline"
 networks:
   traefik:
