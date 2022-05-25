@@ -1,8 +1,8 @@
 version: "3.4"
 services:
   rabbitmq:
-    image: rabbitmq:${TAG.RABBITMQ}
-    container_name: ${CONTAINER_NAME.RABBITMQ}
+    image: rabbitmq:${TAGRABBITMQ}
+    container_name: ${CONTAINERNAMERABBITMQ}
     volumes:
        - ./data/rabbitmq/:/var/lib/rabbitmq/
        - ./data/enabled_plugins:/etc/rabbitmq/enabled_plugins
@@ -14,24 +14,24 @@ services:
        - mqtt
     labels:
        - "traefik.enable=true"
-       - "traefik.http.routers.${SERVICE.RABBITMQ}.entrypoints=http"
-       - "traefik.http.routers.${SERVICE.RABBITMQ}.rule=Host(`${SERVICE.RABBITMQ}.${FQDN}`)"
-       - "traefik.http.middlewares.${SERVICE.RABBITMQ}-https-redirect.redirectscheme.scheme=https"
-       - "traefik.http.routers.${SERVICE.RABBITMQ}.middlewares=${SERVICE.RABBITMQ}-https-redirect"
-       - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.entrypoints=https"
-       - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.rule=Host(`${SERVICE.RABBITMQ}.${FQDN}`)"
-       - "traefik.http.routers.${SERVICE.RABBITMQ}-secure.tls=true"
+       - "traefik.http.routers.${SERVICERABBITMQ}.entrypoints=http"
+       - "traefik.http.routers.${SERVICERABBITMQ}.rule=Host(`${SERVICERABBITMQ}.${FQDN}`)"
+       - "traefik.http.middlewares.${SERVICERABBITMQ}-https-redirect.redirectscheme.scheme=https"
+       - "traefik.http.routers.${SERVICERABBITMQ}.middlewares=${SERVICERABBITMQ}-https-redirect"
+       - "traefik.http.routers.${SERVICERABBITMQ}-secure.entrypoints=https"
+       - "traefik.http.routers.${SERVICERABBITMQ}-secure.rule=Host(`${SERVICERABBITMQ}.${FQDN}`)"
+       - "traefik.http.routers.${SERVICERABBITMQ}-secure.tls=true"
        - "traefik.docker.network=traefik"
-       - "traefik.http.services.${SERVICE.RABBITMQ}.loadbalancer.server.port=3000"
+       - "traefik.http.services.${SERVICERABBITMQ}.loadbalancer.server.port=3000"
 
-       - "traefik.tcp.routers.${SERVICE.RABBITMQ}_mqtt.rule=HostSNI(`*`)"
-       - "traefik.tcp.services.${SERVICE.RABBITMQ}_mqtt.loadbalancer.server.port=1883"
-       - "traefik.tcp.routers.${SERVICE.RABBITMQ}_mqtt.entrypoints=mqtt"
-       - "traefik.tcp.routers.${SERVICE.RABBITMQ}_mqtt.service=${SERVICE.RABBITMQ}_mqtt"
+       - "traefik.tcp.routers.${SERVICERABBITMQ}_mqtt.rule=HostSNI(`*`)"
+       - "traefik.tcp.services.${SERVICERABBITMQ}_mqtt.loadbalancer.server.port=1883"
+       - "traefik.tcp.routers.${SERVICERABBITMQ}_mqtt.entrypoints=mqtt"
+       - "traefik.tcp.routers.${SERVICERABBITMQ}_mqtt.service=${SERVICERABBITMQ}_mqtt"
        
        - "flame.type=application"
        - "flame.name=RabbitMQ"
-       - "flame.url=${SERVICE.RABBITMQ}.${FQDN}"
+       - "flame.url=${SERVICERABBITMQ}.${FQDN}"
        - "flame.icon=protocol"
 
 networks:
