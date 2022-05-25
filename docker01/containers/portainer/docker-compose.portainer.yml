@@ -2,8 +2,8 @@ version: '3'
 
 services:
   portainer:
-    image: portainer/portainer-ce:${TAG.PORTAINER}
-    container_name: ${CONTAINER_NAME.PORTAINER}
+    image: portainer/portainer-ce:${TAGPORTAINER}
+    container_name: ${CONTAINERNAMEPORTAINER}
     env_file:
       - ../.env
       - .env-overwrite
@@ -18,19 +18,19 @@ services:
       - ./data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE.PORTAINER}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.PORTAINER}.rule=Host(`${SERVICE.PORTAINER}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERVICE.PORTAINER}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE.PORTAINER}.middlewares=${SERVICE.PORTAINER}-https-redirect"
-      - "traefik.http.routers.${SERVICE.PORTAINER}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.PORTAINER}-secure.rule=Host(`${SERVICE.PORTAINER}.${FQDN}`)"
-      - "traefik.http.routers.${SERVICE.PORTAINER}-secure.tls=true"
-      - "traefik.http.routers.${SERVICE.PORTAINER}-secure.service=portainer"
-      - "traefik.http.services.${SERVICE.PORTAINER}.loadbalancer.server.port=9000"
+      - "traefik.http.routers.${SERVICEPORTAINER}.entrypoints=http"
+      - "traefik.http.routers.${SERVICEPORTAINER}.rule=Host(`${SERVICEPORTAINER}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICEPORTAINER}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICEPORTAINER}.middlewares=${SERVICEPORTAINER}-https-redirect"
+      - "traefik.http.routers.${SERVICEPORTAINER}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICEPORTAINER}-secure.rule=Host(`${SERVICEPORTAINER}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICEPORTAINER}-secure.tls=true"
+      - "traefik.http.routers.${SERVICEPORTAINER}-secure.service=portainer"
+      - "traefik.http.services.${SERVICEPORTAINER}.loadbalancer.server.port=9000"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=Portainer"
-      - "flame.url=${SERVICE.PORTAINER}.${FQDN}"
+      - "flame.url=${SERVICEPORTAINER}.${FQDN}"
       - "flame.icon=docker"
 
 networks:
