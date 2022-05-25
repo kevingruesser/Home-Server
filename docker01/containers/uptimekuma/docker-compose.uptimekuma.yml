@@ -2,11 +2,8 @@ version: "3.1"
 
 services:
   uptime-kuma:
-    image: louislam/uptime-kuma:${TAG.UPTIMEKUMA}
-    container_name: ${CONTAINER_NAME.UPTIMEKUMA}
-    env_file:
-      - ../.env
-      - .env-overwrite
+    image: louislam/uptime-kuma:${TAGUPTIMEKUMA}
+    container_name: ${CONTAINERNAMEUPTIMEKUMA}
     volumes:
       - ./data/uptime:/app/data
     ports:
@@ -19,16 +16,16 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
-      - "traefik.http.routers.${SERVICE.UPTIMEKUMA}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.UPTIMEKUMA}.rule=Host(`${SERVICE.UPTIMEKUMA}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERVICE.UPTIMEKUMA}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE.UPTIMEKUMA}.middlewares=${SERVICE.UPTIMEKUMA}-https-redirect"
-      - "traefik.http.routers.${SERVICE.UPTIMEKUMA}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.UPTIMEKUMA}-secure.rule=Host(`${SERVICE.UPTIMEKUMA}.${FQDN}`)"
-      - "traefik.http.routers.${SERVICE.UPTIMEKUMA}-secure.tls=true"
+      - "traefik.http.routers.${SERVICEUPTIMEKUMA}.entrypoints=http"
+      - "traefik.http.routers.${SERVICEUPTIMEKUMA}.rule=Host(`${SERVICEUPTIMEKUMA}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICEUPTIMEKUMA}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICEUPTIMEKUMA}.middlewares=${SERVICEUPTIMEKUMA}-https-redirect"
+      - "traefik.http.routers.${SERVICEUPTIMEKUMA}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICEUPTIMEKUMA}-secure.rule=Host(`${SERVICEUPTIMEKUMA}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICEUPTIMEKUMA}-secure.tls=true"
       - "flame.type=application"
       - "flame.name=Uptime-Kuma"
-      - "flame.url=${SERVICE.UPTIMEKUMA}.${FQDN}"
+      - "flame.url=${SERVICEUPTIMEKUMA}.${FQDN}"
       - "flame.icon=alarm-light-outline"
 
 networks:
