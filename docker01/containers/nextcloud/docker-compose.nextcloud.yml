@@ -2,35 +2,32 @@ version: '2.1'
 
 services:
   nextcloud:
-    image: lscr.io/linuxserver/nextcloud:${TAG.NEXTCLOUD}
-    container_name: ${CONTAINER_NAME.NEXTCLOUD}
-    env_file:
-      - ../.env
-      - .env-overwrite
+    image: lscr.io/linuxserver/nextcloud:${TAGNEXTCLOUD}
+    container_name: ${CONTAINERNAMENEXTCLOUD}
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Berlin
     volumes:
       - ./data/config/:/config
-      - ${DATADIR.NEXTCLOUD}:/data
+      - ${DATADIRNEXTCLOUD}:/data
     networks:
       - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
-      - "traefik.http.routers.${SERVICE.NEXTCLOUD}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.NEXTCLOUD}.rule=Host(`${SERVICE.NEXTCLOUD}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERVICE.NEXTCLOUD}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE.NEXTCLOUD}.middlewares=${SERVICE.NEXTCLOUD}-https-redirect"
-      - "traefik.http.routers.${SERVICE.NEXTCLOUD}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.NEXTCLOUD}-secure.rule=Host(`${SERVICE.NEXTCLOUD}.${FQDN}`)"
-      - "traefik.http.routers.${SERVICE.NEXTCLOUD}-secure.tls=true"
-      - "traefik.http.services.${SERVICE.NEXTCLOUD}.loadBalancer.server.port=443"
-      - "traefik.http.services.${SERVICE.NEXTCLOUD}.loadBalancer.server.scheme=https"
+      - "traefik.http.routers.${SERVICENEXTCLOUD}.entrypoints=http"
+      - "traefik.http.routers.${SERVICENEXTCLOUD}.rule=Host(`${SERVICENEXTCLOUD}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICENEXTCLOUD}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICENEXTCLOUD}.middlewares=${SERVICENEXTCLOUD}-https-redirect"
+      - "traefik.http.routers.${SERVICENEXTCLOUD}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICENEXTCLOUD}-secure.rule=Host(`${SERVICENEXTCLOUD}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICENEXTCLOUD}-secure.tls=true"
+      - "traefik.http.services.${SERVICENEXTCLOUD}.loadBalancer.server.port=443"
+      - "traefik.http.services.${SERVICENEXTCLOUD}.loadBalancer.server.scheme=https"
       - "flame.type=application"
       - "flame.name=Nextcloud"
-      - "flame.url=${SERVICE.NEXTCLOUD}.${FQDN}"
+      - "flame.url=${SERVICENEXTCLOUD}.${FQDN}"
       - "flame.icon=cloud-download"
     restart: unless-stopped
 
