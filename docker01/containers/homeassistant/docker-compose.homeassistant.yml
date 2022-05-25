@@ -1,11 +1,8 @@
 version: '3'
 services:
   homeassistant:
-    image: "ghcr.io/home-assistant/home-assistant:${TAG.HOMEASSISTANT}"
-    container_name: ${CONTAINER_NAME.HOMEASSISTANT}
-    env_file:
-      - ../.env
-      - .env-overwrite
+    image: "ghcr.io/home-assistant/home-assistant:${TAGHOMEASSISTANT}"
+    container_name: ${CONTAINERNAMEHOMEASSISTANT}
     volumes:
       - /data/config:/config
       - /etc/localtime:/etc/localtime:ro
@@ -15,18 +12,18 @@ services:
       - "8123:8123"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}.rule=Host(`${SERVICE.HOMEASSISTANT}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERVICE.HOMEASSISTANT}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}.middlewares=${SERVICE}-https-redirect"
-      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}-secure.rule=Host(`${SERVICE.HOMEASSISTANT}.${FQDN}`)"
-      - "traefik.http.routers.${SERVICE.HOMEASSISTANT}-secure.tls=true"
-      - "traefik.http.services.${SERVICE.HOMEASSISTANT}.loadbalancer.server.port=8123"
+      - "traefik.http.routers.${SERVICEHOMEASSISTANT}.entrypoints=http"
+      - "traefik.http.routers.${SERVICEHOMEASSISTANT}.rule=Host(`${SERVICEHOMEASSISTANT}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICEHOMEASSISTANT}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICEHOMEASSISTANT}.middlewares=${SERVICE}-https-redirect"
+      - "traefik.http.routers.${SERVICEHOMEASSISTANT}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICEHOMEASSISTANT}-secure.rule=Host(`${SERVICEHOMEASSISTANT}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICEHOMEASSISTANT}-secure.tls=true"
+      - "traefik.http.services.${SERVICEHOMEASSISTANT}.loadbalancer.server.port=8123"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=HomeAssistant"
-      - "flame.url=${SERVICE.HOMEASSISTANT}.${FQDN}"
+      - "flame.url=${SERVICEHOMEASSISTANT}.${FQDN}"
       - "flame.icon=home-automation"
     networks:
       - traefik
