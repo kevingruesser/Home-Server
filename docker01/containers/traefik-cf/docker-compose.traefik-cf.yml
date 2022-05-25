@@ -1,11 +1,8 @@
 version: "3"
 services:
   traefik:
-    image: traefik:${TAG.TRAEFIK}
-    container_name: ${CONTAINER_NAME.TRAEFIK}
-    env_file:
-      - ../.env
-      - .env-overwrite
+    image: traefik:${TAGTRAEFIK}
+    container_name: ${CONTAINERNAMETRAEFIK}
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -17,8 +14,8 @@ services:
       # RabbitMQ MQTT
       - 1883:1883
     environment:
-      - CF_API_EMAIL=${CLOUDFLAREMAIL.TRAEFIK}
-      - CF_DNS_API_TOKEN=${CLOUDFLARETOKEN.TRAEFIK}
+      - CF_API_EMAIL=${CLOUDFLAREMAILTRAEFIK}
+      - CF_DNS_API_TOKEN=${CLOUDFLARETOKENTRAEFIK}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -27,22 +24,22 @@ services:
       - ./data/config.yml:/config.yml:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}.rule=Host(`${SERVICE.TRAEFIK}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERVICE.TRAEFIK}-auth.basicauth.users=${TRAEFIKUSER}:${TRAEFIKPASSWORD}"
-      - "traefik.http.middlewares.${SERVICE.TRAEFIK}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICETRAEFIK}.entrypoints=http"
+      - "traefik.http.routers.${SERVICETRAEFIK}.rule=Host(`${SERVICETRAEFIK}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICETRAEFIK}-auth.basicauth.users=${TRAEFIKUSER}:${TRAEFIKPASSWORD}"
+      - "traefik.http.middlewares.${SERVICETRAEFIK}-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}.middlewares=traefik-https-redirect"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}-secure.rule=Host(`${SERVICE.TRAEFIK}.${FQDN}`)"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}-secure.middlewares=traefik-auth"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}-secure.tls=true"
+      - "traefik.http.routers.${SERVICETRAEFIK}.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.${SERVICETRAEFIK}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICETRAEFIK}-secure.rule=Host(`${SERVICETRAEFIK}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICETRAEFIK}-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.${SERVICETRAEFIK}-secure.tls=true"
       
       # Comment this Block for other Certresolver
-      - "traefik.http.routers.${SERVICE.TRAEFIK}-secure.tls.certresolver=cloudflare"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}-secure.tls.domains[0].main=${FQDN}"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}-secure.tls.domains[0].sans=*.${FQDN}"
-      - "traefik.http.routers.${SERVICE.TRAEFIK}-secure.service=api@internal"
+      - "traefik.http.routers.${SERVICETRAEFIK}-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.${SERVICETRAEFIK}-secure.tls.domains[0].main=${FQDN}"
+      - "traefik.http.routers.${SERVICETRAEFIK}-secure.tls.domains[0].sans=*.${FQDN}"
+      - "traefik.http.routers.${SERVICETRAEFIK}-secure.service=api@internal"
       
       # Comment this Block out for other Certresolver
       #- "traefik.http.routers.traefik-secure.tls=true"
@@ -51,7 +48,7 @@ services:
       
       - "flame.type=application"
       - "flame.name=Traefik"
-      - "flame.url=${SERVICE.TRAEFIK}.${FQDN}"
+      - "flame.url=${SERVICETRAEFIK}.${FQDN}"
       - "flame.icon=traffic-light"
 
 networks:
