@@ -4,9 +4,6 @@ services:
   node-red:
     image: nodered/node-red:${TAG.NODERED}
     container_name: NODE-RED
-    env_file:
-      - ../.env
-      - .env-overwrite
     environment:
       - TZ=Europe/Berlin
     ports:
@@ -17,17 +14,17 @@ services:
       - node-red-data:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE.NODERED}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.NODERED}.rule=Host(`${SERVICE.NODERED}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERVICE.NODERED}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE.NODERED}.middlewares=${SERVICE.NODERED}-https-redirect"
-      - "traefik.http.routers.${SERVICE.NODERED}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.NODERED}-secure.rule=Host(`${SERVICE.NODERED}.${FQDN}`)"
-      - "traefik.http.routers.${SERVICE.NODERED}-secure.tls=true"
+      - "traefik.http.routers.${SERVICENODERED}.entrypoints=http"
+      - "traefik.http.routers.${SERVICENODERED}.rule=Host(`${SERVICENODERED}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICENODERED}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICENODERED}.middlewares=${SERVICENODERED}-https-redirect"
+      - "traefik.http.routers.${SERVICENODERED}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICENODERED}-secure.rule=Host(`${SERVICENODERED}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICENODERED}-secure.tls=true"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=NodeRed"
-      - "flame.url=${SERVICE.NODERED}.${FQDN}"
+      - "flame.url=${SERVICENODERED}.${FQDN}"
       - "flame.icon=format-text-wrapping-overflow"
 
 volumes:
