@@ -38,7 +38,7 @@ services:
       labels:
        - "traefik.enable=true"
        - "traefik.http.routers.${SERVICE.GOGS}.entrypoints=http"
-       - "traefik.http.routers.${SERVICE}.rule=Host(`${SERVICE.GOGS}.${FQDN}`)"
+       - "traefik.http.routers.${SERVICE.GOGS}.rule=Host(`${SERVICE.GOGS}.${FQDN}`)"
        - "traefik.http.middlewares.${SERVICE.GOGS}-https-redirect.redirectscheme.scheme=https"
        - "traefik.http.routers.${SERVICE.GOGS}.middlewares=${SERVICE.GOGS}-https-redirect"
        - "traefik.http.routers.${SERVICE.GOGS}-secure.entrypoints=https"
