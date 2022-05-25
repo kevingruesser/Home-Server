@@ -2,6 +2,10 @@ version: "3"
 services:
   christmas-community:
     image: wingysam/christmas-community:${TAG.WISHLIST}
+    container_name: ${CONTAINER_NAME.WISHLIST}
+    env_file:
+      - ../.env
+      - .env-overwrite
     volumes:
       - ./data:/data
     ports:
@@ -16,18 +20,18 @@ services:
       # (for weddings, birthdays, etc. only the admin account's list is accessible)
       # Set to 'true' to enable
       SINGLE_LIST: 'false'
-     labels:
-       - "traefik.enable=true"
-       - "traefik.http.routers.${SERVICE.WISHLIST}.entrypoints=http"
-       - "traefik.http.routers.${SERVICE.WISHLIST}.rule=Host(`${SERVICE.WISHLIST}.${FQDN}`)"
-       - "traefik.http.middlewares.${SERVICE.WISHLIST}-https-redirect.redirectscheme.scheme=https"
-       - "traefik.http.routers.${SERVICE.WISHLIST}.middlewares=${SERVICE.WISHLIST}-https-redirect"
-       - "traefik.http.routers.${SERVICE.WISHLIST}-secure.entrypoints=https"
-       - "traefik.http.routers.${SERVICE.WISHLIST}-secure.rule=Host(`${SERVICE.WISHLIST}.${FQDN}`)"
-       - "traefik.http.routers.${SERVICE.WISHLIST}-secure.tls=true"
-       - "traefik.docker.network=traefik"
-       - "flame.type=application"
-       - "flame.name=Wishlist"
-       - "flame.url=${SERVICE.WISHLIST}.${FQDN}"
-       - "flame.icon=playlist-edit"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICE.WISHLIST}.entrypoints=http"
+      - "traefik.http.routers.${SERVICE.WISHLIST}.rule=Host(`${SERVICE.WISHLIST}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICE.WISHLIST}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICE.WISHLIST}.middlewares=${SERVICE.WISHLIST}-https-redirect"
+      - "traefik.http.routers.${SERVICE.WISHLIST}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICE.WISHLIST}-secure.rule=Host(`${SERVICE.WISHLIST}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICE.WISHLIST}-secure.tls=true"
+      - "traefik.docker.network=traefik"
+      - "flame.type=application"
+      - "flame.name=Wishlist"
+      - "flame.url=${SERVICE.WISHLIST}.${FQDN}"
+      - "flame.icon=playlist-edit"
     restart: always
