@@ -3,26 +3,23 @@ version: '3.1'
 services:
 
   postgres:
-    image: postgres:${TAG.POSTGRES.N8N}
-    container_name: ${CONTAINER_NAME.POSTGRES.N8N}
-    env_file:
-      - ../.env
-      - .env-overwrite
+    image: postgres:${TAGPOSTGRESN8N}
+    container_name: ${CONTAINERNAMEPOSTGRESN8N}
     restart: always
     environment:
-      - POSTGRES_USER=${USER.POSTRGES.N8N}
-      - POSTGRES_PASSWORD=${PASSWORD.POSTGRES.N8N}
-      - POSTGRES_DB=${DB.POSTGRES.N8N}
-      - POSTGRES_NON_ROOT_USER=${NONROOT_USER.POSTGRES.N8N}
-      - POSTGRES_NON_ROOT_PASSWORD=${NONROOT_PASSWORD.POSTGRES.N8N}
+      - POSTGRES_USER=${USERPOSTRGESN8N}
+      - POSTGRES_PASSWORD=${PASSWORDPOSTGRESN8N}
+      - POSTGRES_DB=${DBPOSTGRESN8N}
+      - POSTGRES_NON_ROOT_USER=${NONROOTUSERPOSTGRESN8N}
+      - POSTGRES_NON_ROOT_PASSWORD=${NONROOTPASSWORDPOSTGRESN8N}
     volumes:
       - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
     networks:
       - n8n_bridge
 
   n8n:
-    image: n8nio/n8n:${TAG.N8N}
-    container_name: ${CONTAINER_NAME.N8N}
+    image: n8nio/n8n:${TAGN8N}
+    container_name: ${CONTAINERNAMEN8N}
     env_file:
       - ../.env
       - .env-overwrite
@@ -31,9 +28,9 @@ services:
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_DATABASE=${DB.POSTGRES.N8N}
-      - DB_POSTGRESDB_USER=${NONROOT_USER.POSTGRES.N8N}
-      - DB_POSTGRESDB_PASSWORD=${NONROOT_PASSWORD.POSTGRES.N8N}
+      - DB_POSTGRESDB_DATABASE=${DBPOSTGRESN8N}
+      - DB_POSTGRESDB_USER=${NONROOTUSERPOSTGRESN8N}
+      - DB_POSTGRESDB_PASSWORD=${NONROOTPASSWORDPOSTGRESN8N}
     ports:
       - 5678:5678
     links:
@@ -45,17 +42,17 @@ services:
       - n8n_bridge
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${SERVICE.N8N}.entrypoints=http"
-      - "traefik.http.routers.${SERVICE.N8N}.rule=Host(`${SERVICE.N8N}.${FQDN}`)"
-      - "traefik.http.middlewares.${SERVICE.N8N}-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.${SERVICE.N8N}.middlewares=${SERVICE.N8N}-https-redirect"
-      - "traefik.http.routers.${SERVICE.N8N}-secure.entrypoints=https"
-      - "traefik.http.routers.${SERVICE.N8N}-secure.rule=Host(`${SERVICE.N8N}.${FQDN}`)"
-      - "traefik.http.routers.${SERVICE.N8N}-secure.tls=true"
+      - "traefik.http.routers.${SERVICEN8N}.entrypoints=http"
+      - "traefik.http.routers.${SERVICEN8N}.rule=Host(`${SERVICEN8N}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICEN8N}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICEN8N}.middlewares=${SERVICE.N8N}-https-redirect"
+      - "traefik.http.routers.${SERVICEN8N}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICEN8N}-secure.rule=Host(`${SERVICEN8N}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICEN8N}-secure.tls=true"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=N8N"
-      - "flame.url=${SERVIVCE.N8N}.${FQDN}"
+      - "flame.url=${SERVIVCEN8N}.${FQDN}"
       - "flame.icon=home-automation"
     # Wait 5 seconds to start n8n to make sure that PostgreSQL is ready
     # when n8n tries to connect to it
