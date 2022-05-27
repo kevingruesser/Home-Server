@@ -6,6 +6,8 @@ services:
     ports:
      - "34197:34197/udp"
      # - "27015:27015/tcp" # Optional for RCON
+    networks:
+     - traefik
     volumes:
      - ./data/factorio/:/factorio
     environment:
@@ -20,8 +22,13 @@ services:
       - "traefik.http.routers.${SERVICEFACTORIO}-secure.entrypoints=https"
       - "traefik.http.routers.${SERVICEFACTORIO}-secure.rule=Host(`${SERVICEFACTORIO}.${FQDN}`)"
       - "traefik.http.routers.${SERVICEFACTORIO}-secure.tls=true"
+      - "traefik.http.services.${SERVICEFACTORIO}.loadbalancer.server.port=34197"
       - "traefik.docker.network=traefik"
       - "flame.type=application"
       - "flame.name=Factorio"
       - "flame.url=${SERVICEFACTORIO}.${FQDN}"
       - "flame.icon=factory"
+
+networks:
+  traefik:
+    external: true
