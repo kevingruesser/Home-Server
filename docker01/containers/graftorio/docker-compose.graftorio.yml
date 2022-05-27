@@ -1,0 +1,55 @@
+version: '3'
+services:
+  exporter:
+    image: prom/node-exporter
+    command: --collector.textfile.directory=/textfiles
+    volumes:
+      - ~/bin/factorio/script-output/graftorio2:/textfiles # Linux
+    ports:
+      - 9100
+    networks:
+      - graftorio_bridge
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./data/prometheus:/prometheus
+      - ./data/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    networks:
+      - graftorio_bridge
+  grafana:
+    image: grafana/grafana
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+      - ./data/prometheus_datasource.yml:/etc/grafana/provisioning/datasources/prometheus_datasource.yml
+      - ./data/prometheus_dashboard.yml:/etc/grafana/provisioning/dashboards/prometheus_dashboard.yml
+      - ./data/grafana_dashboard.json:/var/lib/grafana/dashboards/grafana_dashboard.json
+    ports:
+      - 3001:3000
+    networks:
+      - traefik
+      - graftorio_bridge
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${SERVICEGRAFTORIO}.entrypoints=http"
+      - "traefik.http.routers.${SERVICEGRAFTORIO}.rule=Host(`${SERVICEGRAFTORIO}.${FQDN}`)"
+      - "traefik.http.middlewares.${SERVICEGRAFTORIO}-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.${SERVICEGRAFTORIO}.middlewares=${SERVICEGRAFTORIO.GOGS}-https-redirect"
+      - "traefik.http.routers.${SERVICEGRAFTORIO}-secure.entrypoints=https"
+      - "traefik.http.routers.${SERVICEGRAFTORIO}-secure.rule=Host(`${SERVICEGRAFTORIO}.${FQDN}`)"
+      - "traefik.http.routers.${SERVICEGRAFTORIO}-secure.tls=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.services.${SERVICEGRAFTORIO}.loadbalancer.server.port=3001"
+      - "flame.type=application"
+      - "flame.name=Graftorio"
+      - "flame.url=${SERVICEGRAFTORIO}.${FQDN}"
+      - "flame.icon=chart-areaspline"
+
+networks:
+  traefik:
+    external: true
+  graftorio_bridge:
